@@ -13,9 +13,11 @@ export default function CloseGameSlideUp({
 }: CloseGameSlideUpProps) {
   const [visible, setVisible] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     if (open) {
+      setSending(false);
       setVisible(true);
       const frame = requestAnimationFrame(() => {
         requestAnimationFrame(() => setEntered(true));
@@ -41,7 +43,8 @@ export default function CloseGameSlideUp({
         type="button"
         className="close-game__overlay"
         aria-label="Dismiss"
-        onClick={onDismiss}
+        onClick={sending ? undefined : onDismiss}
+        disabled={sending}
       />
 
       <div className="close-game__top">
@@ -73,13 +76,21 @@ export default function CloseGameSlideUp({
         </button>
 
         <div className="close-game__actions">
-          <button type="button" className="close-game__btn close-game__btn--primary">
-            Invite Now
+          <button
+            type="button"
+            className="close-game__btn close-game__btn--primary"
+            style={{ fontWeight: 600 }}
+            onClick={() => setSending(true)}
+            aria-busy={sending}
+          >
+            {sending ? "Sending Invite..." : "Invite Now"}
           </button>
           <button
             type="button"
             className="close-game__btn close-game__btn--secondary"
+            style={{ fontWeight: 500 }}
             onClick={onDismiss}
+            disabled={sending}
           >
             Maybe Later, Sero
           </button>
