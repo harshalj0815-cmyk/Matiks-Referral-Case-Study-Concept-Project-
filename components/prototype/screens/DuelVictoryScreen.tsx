@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import CloseGameSlideUp from "@/components/prototype/screens/CloseGameSlideUp";
+
 function avatarColor(seed: string) {
   let hash = 0;
   for (let i = 0; i < seed.length; i += 1) {
@@ -56,6 +61,13 @@ function RankDownIcon() {
 }
 
 export default function DuelVictoryScreen() {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSheetOpen(true), 2000);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const winner = {
     score: 3,
     name: "harshal_ja...",
@@ -71,12 +83,13 @@ export default function DuelVictoryScreen() {
 
   return (
     <div className="duel-victory">
-      <img
-        className="duel-victory__flair"
-        src="/prototype/matiks/elements/flair-duel-victory.png"
-        alt=""
-        aria-hidden
-      />
+        <div className="duel-victory__flair-spin" aria-hidden>
+          <img
+            className="duel-victory__flair"
+            src="/prototype/matiks/elements/flair-duel-victory.png"
+            alt=""
+          />
+        </div>
 
       <div className="duel-victory__top">
         <button type="button" className="duel-victory__chip">
@@ -195,6 +208,8 @@ export default function DuelVictoryScreen() {
           <img src="/prototype/matiks/icons/smiley.svg" alt="" aria-hidden />
         </span>
       </button>
+
+      <CloseGameSlideUp open={sheetOpen} onDismiss={() => setSheetOpen(false)} />
     </div>
   );
 }
