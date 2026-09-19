@@ -1,11 +1,10 @@
 import IPhoneFrame from "@/components/prototype/IPhoneFrame";
-import PuzzleCompletionScreen from "@/components/prototype/screens/PuzzleCompletionScreen";
+import PassThrillScreen from "@/components/prototype/screens/PassThrillScreen";
 
-/** Same flow as /prototype/puzzle-completion: completion first, invite slides up after 3s. */
 export default function PassThrillPage() {
   return (
     <IPhoneFrame>
-      <PuzzleCompletionScreen />
+      <PassThrillScreen />
     </IPhoneFrame>
   );
 }

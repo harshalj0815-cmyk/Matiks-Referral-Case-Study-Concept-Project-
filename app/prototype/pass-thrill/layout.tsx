@@ -1,9 +1,7 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Matiks prototype · Puzzle Completion",
+export const metadata = {
+  title: "Matiks prototype · Pass the Thrill",
   description:
-    "Puzzle Complete screen with invite slide-up after 3 seconds.",
+    "Standalone iPhone 16 Pro prototype of the Matiks Pass the Thrill invite screen.",
 };
 
 export default function PassThrillLayout({

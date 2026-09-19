@@ -72,6 +72,13 @@ export default function MatiksReferralCard({
             />
             {milestones.map((mark) => (
               <span
+                key={`tick-${mark}`}
+                className="mk-referral__tick"
+                style={{ left: `${(mark / xpGoal) * 100}%` }}
+              />
+            ))}
+            {milestones.map((mark) => (
+              <span
                 key={mark}
                 className="mk-referral__mark"
                 style={{ left: `${(mark / xpGoal) * 100}%` }}
@@ -88,7 +95,7 @@ export default function MatiksReferralCard({
         <MatiksButton
           variant="secondary"
           fullWidth
-          leadingIcon={
+          trailingIcon={
             <img src="/prototype/matiks/icons/gift.svg" alt="" aria-hidden />
           }
           onClick={onClaim}
