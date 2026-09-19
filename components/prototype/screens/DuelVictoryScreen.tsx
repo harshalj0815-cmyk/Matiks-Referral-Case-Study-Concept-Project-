@@ -2,21 +2,8 @@
 
 import { useEffect, useState } from "react";
 import CloseGameSlideUp from "@/components/prototype/screens/CloseGameSlideUp";
+import { MatiksButton, MatiksChip, MatiksToast } from "@/components/prototype/ui";
 
-function avatarColor(seed: string) {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue} 58% 42%)`;
-}
-
-function initials(name: string) {
-  const parts = name.replace(/\./g, " ").trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2);
-  return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`;
-}
 
 function RankUpIcon() {
   return (
@@ -60,25 +47,51 @@ function RankDownIcon() {
   );
 }
 
-export default function DuelVictoryScreen() {
+type DuelVictoryScreenProps = {
+  /** Pass the Thrill slide-up hero art */
+  sheetArtSrc?: string;
+  /** How slide-up art fills the slot — natural keeps Paper framing */
+  sheetArtFit?: "cover" | "natural";
+  sheetTitle?: string;
+  sheetBodyBefore?: string;
+  /** When false, skip the timed friend toast (flow controls handle toasts) */
+  autoToast?: boolean;
+};
+
+export default function DuelVictoryScreen({
+  sheetArtSrc = "/prototype/matiks/elements/close-game-slide-up.png",
+  sheetArtFit = "natural",
+  sheetTitle,
+  sheetBodyBefore,
+  autoToast = true,
+}: DuelVictoryScreenProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [friendToast, setFriendToast] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSheetOpen(true), 2000);
-    return () => window.clearTimeout(timer);
-  }, []);
+    const toastTimer = autoToast
+      ? window.setTimeout(() => setFriendToast(true), 700)
+      : undefined;
+    const sheetTimer = window.setTimeout(() => setSheetOpen(true), 2000);
+    return () => {
+      if (toastTimer !== undefined) window.clearTimeout(toastTimer);
+      window.clearTimeout(sheetTimer);
+    };
+  }, [autoToast]);
 
   const winner = {
     score: 3,
     name: "harshal_ja...",
     rating: 1215,
     delta: 12,
+    avatar: "/prototype/matiks/elements/avatar-suyash.jpg",
   };
   const loser = {
     score: 2,
     name: "Mathelete",
     rating: 1224,
     delta: -12,
+    avatar: "/prototype/matiks/elements/avatar-referral-2.jpg",
   };
 
   return (
@@ -91,22 +104,37 @@ export default function DuelVictoryScreen() {
           />
         </div>
 
+      {friendToast && !sheetOpen ? (
+        <div className="duel-victory__toast">
+          <MatiksToast variant="friend" />
+        </div>
+      ) : null}
+
       <div className="duel-victory__top">
-        <button type="button" className="duel-victory__chip">
-          <img
-            src="/prototype/matiks/icons/caret-left.svg"
-            alt=""
-            aria-hidden
-          />
+        <MatiksChip
+          leadingIcon={
+            <img
+              src="/prototype/matiks/icons/caret-left.svg"
+              alt=""
+              aria-hidden
+            />
+          }
+        >
           Home
-        </button>
-        <button type="button" className="duel-victory__icon-btn" aria-label="Share">
-          <img
-            src="/prototype/matiks/icons/arrow-bend-up-right.svg"
-            alt=""
-            aria-hidden
-          />
-        </button>
+        </MatiksChip>
+        <MatiksChip
+          iconOnly
+          aria-label="Share"
+          leadingIcon={
+            <img
+              src="/prototype/matiks/icons/share-bend.svg"
+              alt=""
+              aria-hidden
+            />
+          }
+        >
+          Share
+        </MatiksChip>
       </div>
 
       <div className="duel-victory__stage">
@@ -127,12 +155,11 @@ export default function DuelVictoryScreen() {
                   {winner.score}
                 </div>
                 <div className="duel-victory__user-pill">
-                  <span
+                  <img
                     className="duel-victory__avatar"
-                    style={{ background: avatarColor(winner.name) }}
-                  >
-                    {initials(winner.name)}
-                  </span>
+                    src={winner.avatar}
+                    alt=""
+                  />
                   <span className="duel-victory__username">{winner.name}</span>
                 </div>
                 <div className="duel-victory__rating">
@@ -151,12 +178,11 @@ export default function DuelVictoryScreen() {
                   {loser.score}
                 </div>
                 <div className="duel-victory__user-pill">
-                  <span
+                  <img
                     className="duel-victory__avatar"
-                    style={{ background: avatarColor(loser.name) }}
-                  >
-                    {initials(loser.name)}
-                  </span>
+                    src={loser.avatar}
+                    alt=""
+                  />
                   <span className="duel-victory__username">{loser.name}</span>
                 </div>
                 <div className="duel-victory__rating">
@@ -190,26 +216,40 @@ export default function DuelVictoryScreen() {
         </div>
 
         <div className="duel-victory__actions">
-          <button type="button" className="duel-victory__btn duel-victory__btn--secondary">
+          <MatiksButton variant="secondary" fullWidth size="md">
             Rematch
-          </button>
-          <button type="button" className="duel-victory__btn duel-victory__btn--primary">
+          </MatiksButton>
+          <MatiksButton variant="primary" fullWidth size="md">
             New Duel
-          </button>
+          </MatiksButton>
         </div>
       </div>
 
-      <button
-        type="button"
-        className="duel-victory__feedback"
-        aria-label="Send feedback"
-      >
-        <span className="duel-victory__feedback-window">
-          <img src="/prototype/matiks/icons/smiley.svg" alt="" aria-hidden />
-        </span>
-      </button>
+      <div className="duel-victory__feedback">
+        <MatiksChip
+          iconOnly
+          aria-label="Send feedback"
+          leadingIcon={
+            <img
+              src="/prototype/matiks/icons/smiley.svg"
+              alt=""
+              aria-hidden
+            />
+          }
+        >
+          Feedback
+        </MatiksChip>
+      </div>
 
-      <CloseGameSlideUp open={sheetOpen} onDismiss={() => setSheetOpen(false)} />
+      <CloseGameSlideUp
+        open={sheetOpen}
+        onDismiss={() => setSheetOpen(false)}
+        variant="duel"
+        artSrc={sheetArtSrc}
+        artFit={sheetArtFit}
+        title={sheetTitle}
+        bodyBefore={sheetBodyBefore}
+      />
     </div>
   );
 }

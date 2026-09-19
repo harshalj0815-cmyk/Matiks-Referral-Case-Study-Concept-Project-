@@ -16,8 +16,9 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata = {
-  title: "Matiks prototype · Duel Victory",
-  description: "Standalone iPhone 16 Pro prototype of the Matiks Duel Victory screen.",
+  title: "Matiks prototype · Referral flows",
+  description:
+    "iPhone 16 Pro prototype switcher for Matiks referral slide-ups, toasts, and Track Referral.",
 };
 
 export default function PrototypeLayout({

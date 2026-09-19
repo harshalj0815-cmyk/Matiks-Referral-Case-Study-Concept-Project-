@@ -26,6 +26,12 @@
   --proto-btn-border: 2.5px;
   --proto-btn-rise: 4px;
 
+  --case-ink: #282828;
+  --case-mute: #555555;
+  --case-wash: #f4f4f4;
+  --case-board: #f5f5f7;
+  --case-on-ink: #ffffff;
+
   height: 100dvh;
   max-height: 100dvh;
   margin: 0;
@@ -34,8 +40,123 @@
   padding: 16px;
   box-sizing: border-box;
   overflow: hidden;
-  background: #f3f1ec;
+  background: var(--case-board);
   font-family: var(--font-montserrat), "Montserrat", sans-serif;
+}
+
+.prototype-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+}
+
+.prototype-flow__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.prototype-flow__toast {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  z-index: 80;
+  width: 354px;
+  max-width: calc(100% - 24px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.prototype-flow__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(520px, 44vw);
+  flex-shrink: 0;
+  font-family: var(--font-figtree), "Figtree", sans-serif;
+}
+
+.case-seg {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid rgba(40, 40, 40, 0.08);
+  border-radius: 22px;
+  padding: 14px 14px 12px;
+  box-shadow: 0 1px 2px rgba(40, 40, 40, 0.04);
+}
+
+.case-seg__label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--case-mute);
+}
+
+.case-seg__track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: stretch;
+  gap: 2px;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--case-wash);
+  border-radius: 999px;
+  padding: 5px;
+}
+
+.case-seg__option {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
+  flex: 1 1 0;
+  min-width: max-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--case-mute);
+  background: transparent;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.case-seg__option--active {
+  font-weight: 600;
+  color: var(--case-on-ink);
+  background: var(--case-ink);
+}
+
+.case-seg__option:focus-visible {
+  outline: 2px solid var(--case-ink);
+  outline-offset: 2px;
+}
+
+.case-seg--disabled {
+  opacity: 0.48;
+}
+
+.case-seg--disabled .case-seg__option {
+  cursor: not-allowed;
 }
 
 .iphone-scale {
@@ -49,6 +170,41 @@
   width: calc(var(--phone-w) * var(--fit-scale));
   height: calc(var(--phone-h) * var(--fit-scale));
   position: relative;
+  flex-shrink: 0;
+}
+
+.prototype-flow .iphone-scale {
+  --fit-scale: min(
+    1,
+    calc((100dvh - 32px) / var(--phone-h)),
+    calc((100dvw - 580px) / var(--phone-w))
+  );
+}
+
+@media (max-width: 860px) {
+  .prototype-canvas {
+    overflow: auto;
+    place-items: start center;
+    padding: 20px 16px 32px;
+  }
+
+  .prototype-flow {
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+  }
+
+  .prototype-flow__controls {
+    width: min(520px, 100%);
+  }
+
+  .iphone-scale {
+    --fit-scale: min(
+      1,
+      calc((100dvh - 220px) / var(--phone-h)),
+      calc((100dvw - 32px) / var(--phone-w))
+    );
+  }
 }
 
 .iphone-frame {
@@ -373,13 +529,9 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 8px;
-  font-weight: 700;
-  color: #fff;
+  display: block;
+  object-fit: cover;
   flex-shrink: 0;
-  text-transform: uppercase;
 }
 
 .duel-victory__username {
@@ -396,7 +548,7 @@
 .duel-victory__rating {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   font-size: 14px;
   font-weight: 600;
   color: var(--proto-text-muted);
@@ -535,33 +687,11 @@
   z-index: 5;
   left: 24px;
   bottom: 38px;
-  width: auto;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-  display: block;
-  cursor: default;
 }
 
-.duel-victory__feedback-window {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  border: 3px solid #717171;
-  background: #2c2c2c;
-  box-shadow: 0 4px 0 #717171;
-}
-
-.duel-victory__feedback img {
-  display: block;
-  width: 22px;
-  height: 20px;
+.duel-victory__feedback .mk-chip__icon img {
+  width: 18px;
+  height: 18px;
 }
 
 .close-game {
@@ -581,9 +711,9 @@
   border: none;
   padding: 0;
   margin: 0;
-  background: rgba(0, 0, 0, 0.48);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   opacity: 0;
   cursor: pointer;
   transition: opacity 0.28s ease;
@@ -591,7 +721,7 @@
 
 .close-game__top {
   position: absolute;
-  top: 58px;
+  top: 64px;
   left: 24px;
   right: 24px;
   z-index: 2;
@@ -602,30 +732,8 @@
   transition: opacity 0.28s ease;
 }
 
-.close-game__terms {
+.close-game__top .mk-chip {
   pointer-events: auto;
-  appearance: none;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 3px solid #717171;
-  background: #2c2c2c;
-  box-shadow: 0 4px 0 #717171;
-  color: #fff;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: default;
-}
-
-.close-game__art-wrap {
-  position: relative;
-  z-index: 2;
-  width: calc(100% + 48px);
-  margin: -168px -24px 12px;
-  pointer-events: none;
-  line-height: 0;
-  flex-shrink: 0;
 }
 
 .close-game--open .close-game__overlay,
@@ -633,28 +741,25 @@
   opacity: 1;
 }
 
-.close-game--open .close-game__sheet {
+.close-game--invite.close-game--open .close-game__sheet {
   transform: translateY(0);
 }
 
-.close-game__art {
-  display: block;
-  width: 100%;
-  height: auto;
-  vertical-align: top;
-  object-fit: fill;
-  border-radius: 0;
-}
-
-.close-game__sheet {
+/* Shared invite sheet — same format/size as Puzzle Completion */
+.close-game--invite .close-game__sheet {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 50%;
+  min-height: 556px;
+  height: 556px;
   box-sizing: border-box;
-  padding: 0 24px calc(28px + env(safe-area-inset-bottom, 0px));
-  border-radius: 24px 24px 0 0;
-  background: #1a1a1a;
+  padding: 0 24px calc(40px + env(safe-area-inset-bottom, 0px));
+  border-radius: 16px 16px 0 0;
+  background: radial-gradient(
+    61.52% 115.43% at 50% 38.48%,
+    var(--proto-card-start) 0%,
+    var(--proto-card-end) 61.54%
+  );
   transform: translateY(110%);
   transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -665,173 +770,145 @@
   overflow: visible;
 }
 
-.close-game__title {
-  margin: 16px 0 4px;
-  width: 100%;
-  text-align: center;
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.close-game__body {
-  margin: 8px 0 8px;
-  max-width: 300px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.28;
-  color: #c6c6c6;
-}
-
-.close-game__highlight {
-  color: var(--proto-lime);
-  font-weight: 400;
-}
-
-.close-game__link {
-  appearance: none;
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin: 12px 0 14px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.45);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: default;
-}
-
-.close-game__actions {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: auto;
-  padding-top: 28px;
-  padding-bottom: 28px;
-}
-
-/* Puzzle Complete invite — Paper 1MG-0 */
-.close-game--puzzle .close-game__overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-.close-game--puzzle .close-game__top {
-  top: 64px;
-  left: 24px;
-  right: 24px;
-}
-
-.close-game--puzzle .close-game__sheet {
-  min-height: 556px;
-  height: 556px;
-  border-radius: 16px 16px 0 0;
-  background: radial-gradient(
-    61.52% 115.43% at 50% 38.48%,
-    var(--proto-card-start) 0%,
-    var(--proto-card-end) 61.54%
-  );
-  padding: 0 24px calc(40px + env(safe-area-inset-bottom, 0px));
-  overflow: visible;
-  justify-content: flex-start;
-  box-sizing: border-box;
-}
-
-.close-game--puzzle .close-game__art-wrap {
+.close-game--invite .close-game__art-wrap {
+  position: relative;
+  z-index: 2;
   width: calc(100% + 48px);
   margin: -81px -24px 0;
+  pointer-events: none;
+  line-height: 0;
+  flex-shrink: 0;
 }
 
-.close-game--puzzle .close-game__art {
+.close-game--invite .close-game__art {
+  display: block;
   width: 100%;
   height: 305px;
   object-fit: cover;
   object-position: 50% center;
   border-radius: 0;
+  vertical-align: top;
 }
 
-.close-game--puzzle .close-game__title {
+/* All invite slide-ups: show authored Paper art, no cover-crop zoom */
+.close-game--invite.close-game--art-natural .close-game__sheet {
+  /* Cover mode locks 556px for a 305px crop. Natural art varies in height,
+     so size the sheet to content and keep ~21px under the secondary CTA. */
+  height: auto;
+  min-height: 0;
+  padding-bottom: 21px;
+}
+
+.close-game--art-natural .close-game__art-wrap {
+  width: calc(100% + 48px);
+  margin: -81px -24px 0;
+  overflow: visible;
+  line-height: 0;
+}
+
+.close-game--art-natural .close-game__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center top;
+  vertical-align: top;
+}
+
+.close-game--invite .close-game__title {
   margin: 36px 0 0;
   max-width: 326px;
+  width: 100%;
+  text-align: center;
   font-size: 22px;
+  font-weight: 700;
   line-height: 28px;
   letter-spacing: -0.02em;
+  color: #fff;
   white-space: normal;
 }
 
-.close-game--puzzle .close-game__body {
+.close-game--invite .close-game__body {
   margin: 18px 0 0;
   max-width: 326px;
   font-size: 15px;
+  font-weight: 400;
   line-height: 18px;
   letter-spacing: -0.02em;
+  color: #c6c6c6;
 }
 
-.close-game--puzzle .close-game__link {
+.close-game--invite .close-game__highlight {
+  color: var(--proto-lime);
+  font-weight: 400;
+}
+
+.close-game--invite .close-game__link.mk-text-link {
   margin: 20px 0 0;
   font-size: 14px;
+  font-weight: 400;
   line-height: 18px;
   letter-spacing: -0.02em;
   color: #717171;
-  text-decoration: none;
 }
 
-.close-game--puzzle .close-game__actions {
+.close-game--invite .close-game__link .mk-text-link__label {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.close-game--invite .close-game__actions {
   width: 100%;
   max-width: 302px;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   margin-top: 41px;
   padding-top: 0;
   padding-bottom: 0;
 }
 
-.close-game__btn {
-  appearance: none;
+/* Loom Slide up — Paper 1UJ-0 spacing */
+.close-game--loom.close-game--invite.close-game--art-natural .close-game__sheet {
+  padding-bottom: 34px;
+  overflow: visible;
+}
+
+.close-game--loom.close-game--art-natural .close-game__art-wrap {
+  /* Full-bleed; pull sky flush with sheet top so cats peek above */
+  margin: -80px -24px 0;
+  width: calc(100% + 48px);
+  overflow: visible;
+  line-height: 0;
+}
+
+.close-game--loom.close-game--art-natural .close-game__art {
+  display: block;
   width: 100%;
-  height: 44px;
-  border-radius: var(--proto-radius-button);
-  font-family: inherit;
-  font-size: 15px;
-  cursor: default;
+  height: auto;
+  object-fit: contain;
+  object-position: center top;
 }
 
-.close-game__btn--primary {
-  color: #111;
-  background: var(--proto-lime);
-  border: 3px solid #61b309;
-  box-shadow: 0 4px 0 #61b309;
-  font-weight: 600;
-  letter-spacing: -1px;
+.close-game--loom.close-game--invite .close-game__title {
+  margin-top: 20px;
 }
 
-.close-game__btn--secondary {
-  color: #ffffff;
-  background: #181818;
-  border: 3px solid #717171;
-  box-shadow: 0 4px 0 #717171;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 4px;
+.close-game--loom.close-game--invite .close-game__body {
+  margin-top: 12px;
+}
+
+.close-game--loom.close-game--invite .close-game__link.mk-text-link {
+  margin-top: 14px;
+}
+
+.close-game--loom.close-game--invite .close-game__actions {
+  margin-top: 24px;
+  gap: 12px;
 }
 
 .close-game__overlay:disabled {
   cursor: default;
-}
-
-.close-game__btn--secondary:disabled {
-  color: #717171;
-  background: #181818;
-  border-color: #717171;
-  box-shadow: 0 4px 0 #717171;
-  cursor: default;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -841,7 +918,7 @@
     transition: none;
   }
 
-  .close-game__sheet {
+  .close-game--invite .close-game__sheet {
     transform: translateY(0);
   }
 
@@ -1193,15 +1270,21 @@
   max-width: 354px;
   box-sizing: border-box;
   padding: 8px;
-  border-radius: var(--proto-radius-card);
+  border-radius: 16px;
   border: 1px solid var(--proto-border);
   background: var(--proto-surface);
   color: var(--proto-text);
 }
 
+.mk-toast--friend {
+  padding: 8px;
+}
+
+.mk-toast--failed,
 .mk-toast--wifi {
   border-radius: 16px;
-  padding: 12px 10px;
+  padding: 8px;
+  min-height: 76px;
 }
 
 .mk-toast__row {
@@ -1220,16 +1303,26 @@
   flex-shrink: 0;
 }
 
+.mk-toast__status-icon,
 .mk-toast__wifi-icon {
   display: grid;
   place-items: center;
   width: 44px;
   height: 44px;
   flex-shrink: 0;
+  border-radius: var(--proto-radius-chip);
+  background: #181818;
+  border: 1px solid var(--proto-border);
+}
+
+.mk-toast__status-icon img,
+.mk-toast__wifi-icon img {
+  display: block;
+  width: 22px;
+  height: 22px;
 }
 
 .mk-toast__wifi-icon img {
-  display: block;
   width: 28px;
   height: 28px;
 }
@@ -1259,11 +1352,32 @@
   color: var(--proto-text-muted);
 }
 
+.mk-toast--friend .mk-toast__body {
+  white-space: nowrap;
+}
+
 .mk-toast__chevron {
   display: block;
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+}
+
+.duel-victory__toast,
+.close-game__toast {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  z-index: 50;
+  width: 354px;
+  max-width: calc(100% - 24px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.close-game__toast {
+  top: 64px;
+  z-index: 6;
 }
 
 .mk-referral {
@@ -1781,30 +1895,31 @@
 }
 
 .pass-thrill__art-wrap {
-  position: absolute;
-  top: -81px;
-  left: 0;
-  right: 0;
-  width: 100%;
+  position: relative;
   z-index: 2;
+  width: calc(100% + 76px);
+  margin: -81px -38px 0;
   pointer-events: none;
+  line-height: 0;
+  flex-shrink: 0;
 }
 
 .pass-thrill__art {
   display: block;
   width: 100%;
-  height: 305px;
-  object-fit: cover;
-  object-position: 50% center;
-  border-radius: 16px 16px 0 0;
+  height: auto;
+  object-fit: contain;
+  object-position: center top;
+  border-radius: 0;
+  vertical-align: top;
 }
 
 .pass-thrill__sheet {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 556px;
-  min-height: 556px;
+  height: auto;
+  min-height: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1816,12 +1931,12 @@
     var(--proto-card-start) 0%,
     var(--proto-card-end) 61.54%
   );
-  padding: 260px 38px 40px;
+  padding: 0 38px 21px;
   overflow: visible;
 }
 
 .pass-thrill__title {
-  margin: 0;
+  margin: 36px 0 0;
   width: 100%;
   max-width: 326px;
   text-align: center;
@@ -1972,6 +2087,37 @@
   width: 100%;
   max-width: 302px;
   margin: 16px auto 0;
+}
+
+/* Loom Slide up — Paper 1UJ-0 */
+.loom-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--proto-page);
+}
+
+.loom-slide__home-btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.loom-slide__home {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
 }
 
 

@@ -209,6 +209,7 @@ export default function PuzzleCompletionScreen() {
         open={sheetOpen}
         onDismiss={() => setSheetOpen(false)}
         variant="puzzle"
+        artFit="natural"
         artSrc="/prototype/matiks/elements/new-record-slide-up.png"
       />
     </div>

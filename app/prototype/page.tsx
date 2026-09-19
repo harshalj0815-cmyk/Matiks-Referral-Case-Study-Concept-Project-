@@ -1,10 +1,5 @@
-import IPhoneFrame from "@/components/prototype/IPhoneFrame";
-import DuelVictoryScreen from "@/components/prototype/screens/DuelVictoryScreen";
+import PrototypeFlow from "@/components/prototype/PrototypeFlow";
 
 export default function PrototypePage() {
-  return (
-    <IPhoneFrame>
-      <DuelVictoryScreen />
-    </IPhoneFrame>
-  );
+  return <PrototypeFlow />;
 }

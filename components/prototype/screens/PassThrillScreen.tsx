@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { MatiksButton, MatiksChip } from "@/components/prototype/ui";
 
-export default function PassThrillScreen() {
+type PassThrillScreenProps = {
+  /** Hero art; default is track/finish-line (Paper 1VC-0) */
+  artSrc?: string;
+};
+
+export default function PassThrillScreen({
+  artSrc = "/prototype/matiks/elements/paper-art-3.png",
+}: PassThrillScreenProps) {
   const [sending, setSending] = useState(false);
 
   return (
@@ -24,15 +31,11 @@ export default function PassThrillScreen() {
       </div>
 
       <div className="pass-thrill__panel">
-        <div className="pass-thrill__art-wrap">
-          <img
-            className="pass-thrill__art"
-            src="/prototype/matiks/elements/paper-art-3.png"
-            alt=""
-          />
-        </div>
-
         <div className="pass-thrill__sheet">
+          <div className="pass-thrill__art-wrap">
+            <img className="pass-thrill__art" src={artSrc} alt="" />
+          </div>
+
           <h1 className="pass-thrill__title">Pass the Thrill, Earn Together</h1>
 
           <p className="pass-thrill__body">

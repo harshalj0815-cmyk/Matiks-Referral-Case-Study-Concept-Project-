@@ -1,14 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MatiksButton, MatiksChip } from "@/components/prototype/ui";
+import {
+  MatiksButton,
+  MatiksChip,
+  MatiksTextLink,
+  MatiksToast,
+} from "@/components/prototype/ui";
 
 type CloseGameSlideUpProps = {
   open: boolean;
   onDismiss: () => void;
   artSrc?: string;
-  /** Visual variant — puzzle-complete invite matches Paper 1MG-0 */
+  /** Invite sheet layout — matches Puzzle Completion / Paper 1MG-0 */
   variant?: "duel" | "puzzle";
+  /** cover = crop to 305px slot; natural = show Paper art as authored (default) */
+  artFit?: "cover" | "natural";
+  title?: string;
+  /** Plain body before the lime highlight */
+  bodyBefore?: string;
+  /** Lime-highlighted close of the body */
+  highlight?: string;
+  /** Extra class for screen-specific spacing (e.g. Loom) */
+  className?: string;
 };
 
 export default function CloseGameSlideUp({
@@ -16,14 +30,21 @@ export default function CloseGameSlideUp({
   onDismiss,
   artSrc = "/prototype/matiks/elements/close-game-slide-up.png",
   variant = "duel",
+  artFit = "natural",
+  title = "Pass the Thrill, Earn Together",
+  bodyBefore = "That was a nail-biter and you made it. Invite a friend and you'll both",
+  highlight = "get 50 Pies.",
+  className = "",
 }: CloseGameSlideUpProps) {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(open);
   const [entered, setEntered] = useState(false);
   const [sending, setSending] = useState(false);
+  const [inviteFailed, setInviteFailed] = useState(false);
 
   useEffect(() => {
     if (open) {
       setSending(false);
+      setInviteFailed(false);
       setVisible(true);
       const frame = requestAnimationFrame(() => {
         requestAnimationFrame(() => setEntered(true));
@@ -36,12 +57,24 @@ export default function CloseGameSlideUp({
     return () => window.clearTimeout(hide);
   }, [open]);
 
+  useEffect(() => {
+    if (!sending) return undefined;
+    const fail = window.setTimeout(() => {
+      setSending(false);
+      setInviteFailed(true);
+    }, 1600);
+    return () => window.clearTimeout(fail);
+  }, [sending]);
+
   if (!visible) return null;
 
   const rootClass = [
     "close-game",
-    variant === "puzzle" ? "close-game--puzzle" : "",
+    "close-game--invite",
+    variant === "duel" ? "close-game--duel-art" : "close-game--puzzle-art",
+    artFit === "natural" ? "close-game--art-natural" : "",
     entered && open ? "close-game--open" : "",
+    className,
   ]
     .filter(Boolean)
     .join(" ");
@@ -62,8 +95,20 @@ export default function CloseGameSlideUp({
       />
 
       <div className="close-game__top">
-        <MatiksChip>See Terms</MatiksChip>
+        {!inviteFailed ? <MatiksChip>See Terms</MatiksChip> : null}
       </div>
+
+      {inviteFailed ? (
+        <div className="close-game__toast">
+          <MatiksToast
+            variant="failed"
+            onRetry={() => {
+              setInviteFailed(false);
+              setSending(true);
+            }}
+          />
+        </div>
+      ) : null}
 
       <div className="close-game__sheet">
         <div className="close-game__art-wrap">
@@ -71,23 +116,26 @@ export default function CloseGameSlideUp({
         </div>
 
         <h2 id="close-game-title" className="close-game__title">
-          Pass the Thrill, Earn Together
+          {title}
         </h2>
 
         <p className="close-game__body">
-          That was a nail-biter and you made it. Invite a friend and you&apos;ll
-          both <span className="close-game__highlight">get 50 Pies.</span>
+          {bodyBefore}{" "}
+          <span className="close-game__highlight">{highlight}</span>
         </p>
 
-        <button type="button" className="close-game__link">
+        <MatiksTextLink className="close-game__link">
           What Are Pies? Learn More
-        </button>
+        </MatiksTextLink>
 
         <div className="close-game__actions">
           <MatiksButton
             variant="primary"
             fullWidth
-            onClick={() => setSending(true)}
+            onClick={() => {
+              setInviteFailed(false);
+              setSending(true);
+            }}
             aria-busy={sending}
           >
             {sending ? "Sending Invite..." : "Invite Now"}
