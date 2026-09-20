@@ -7,10 +7,11 @@ type Option<T extends string> = {
 
 type CaseSegmentedControlProps<T extends string> = {
   label: string;
-  value: T;
+  value: T | null;
   options: Option<T>[];
   onChange: (value: T) => void;
   disabled?: boolean;
+  note?: string;
   "aria-label"?: string;
 };
 
@@ -20,6 +21,7 @@ export default function CaseSegmentedControl<T extends string>({
   options,
   onChange,
   disabled = false,
+  note,
   "aria-label": ariaLabel,
 }: CaseSegmentedControlProps<T>) {
   return (
@@ -52,6 +54,7 @@ export default function CaseSegmentedControl<T extends string>({
           );
         })}
       </div>
+      {note ? <p className="case-seg__note">{note}</p> : null}
     </div>
   );
 }

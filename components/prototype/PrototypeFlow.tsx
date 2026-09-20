@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import IPhoneFrame from "@/components/prototype/IPhoneFrame";
 import CaseSegmentedControl from "@/components/prototype/CaseSegmentedControl";
 import DuelVictoryScreen from "@/components/prototype/screens/DuelVictoryScreen";
@@ -8,7 +8,13 @@ import LoomSlideUpScreen from "@/components/prototype/screens/LoomSlideUpScreen"
 import PassThrillHikeScreen from "@/components/prototype/screens/PassThrillHikeScreen";
 import PuzzleCompletionScreen from "@/components/prototype/screens/PuzzleCompletionScreen";
 import TrackReferralScreen from "@/components/prototype/screens/TrackReferralScreen";
-import { MatiksToast } from "@/components/prototype/ui";
+import type { InviteToastOutcome } from "@/components/prototype/screens/CloseGameSlideUp";
+import { PrototypePrefsProvider } from "@/components/prototype/PrototypePrefs";
+import {
+  unlockPrototypeSfx,
+  playPrototypeSfx,
+  setPrototypeSfxEnabled,
+} from "@/components/prototype/sfx";
 
 type FlowId =
   | "slideup1"
@@ -17,7 +23,6 @@ type FlowId =
   | "slideup4"
   | "track-referral";
 
-type ToastId = "off" | "friend" | "failed" | "wifi";
 type TrackState = "full" | "empty";
 
 const FLOW_OPTIONS: { value: FlowId; label: string }[] = [
@@ -28,11 +33,10 @@ const FLOW_OPTIONS: { value: FlowId; label: string }[] = [
   { value: "track-referral", label: "Track Referral" },
 ];
 
-const TOAST_OPTIONS: { value: ToastId; label: string }[] = [
-  { value: "off", label: "Off" },
-  { value: "friend", label: "Friend" },
-  { value: "failed", label: "Failed" },
-  { value: "wifi", label: "Wifi" },
+const TOAST_OPTIONS: { value: InviteToastOutcome; label: string }[] = [
+  { value: "success", label: "Success" },
+  { value: "fail1", label: "Fail1" },
+  { value: "fail2", label: "Fail2" },
 ];
 
 const TRACK_OPTIONS: { value: TrackState; label: string }[] = [
@@ -40,69 +44,282 @@ const TRACK_OPTIONS: { value: TrackState; label: string }[] = [
   { value: "empty", label: "Empty" },
 ];
 
+function ReloadIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M19.5 12a7.5 7.5 0 1 1-2.1-5.2"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M19.5 4.5v5h-5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SoundIcon({ on }: { on: boolean }) {
+  return on ? (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 10v4h3l4 3V7L7 10H4Z" fill="currentColor" />
+      <path
+        d="M15.5 8.5a4.5 4.5 0 0 1 0 7M17.8 6.2a7.5 7.5 0 0 1 0 11.6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  ) : (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 10v4h3l4 3V7L7 10H4Z" fill="currentColor" />
+      <path
+        d="M16 9l5 5M21 9l-5 5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MotionIcon({ on }: { on: boolean }) {
+  return on ? (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 12h3l2-6 3 12 2-6h6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ) : (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 12h16"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M8 8l8 8M16 8l-8 8"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export default function PrototypeFlow() {
   const [flow, setFlow] = useState<FlowId>("slideup1");
-  const [toast, setToast] = useState<ToastId>("off");
+  const [toast, setToast] = useState<InviteToastOutcome>("success");
   const [trackState, setTrackState] = useState<TrackState>("full");
+  const [trackReturnTo, setTrackReturnTo] = useState<
+    Exclude<FlowId, "track-referral">
+  >("slideup1");
+  const [reloadKey, setReloadKey] = useState(0);
+  const [soundOn, setSoundOnState] = useState(true);
+  const [animationsOn, setAnimationsOn] = useState(true);
 
   const trackSelected = flow === "track-referral";
+
+  const setSoundOn = useCallback((value: boolean) => {
+    setSoundOnState(value);
+    setPrototypeSfxEnabled(value);
+    if (value) void unlockPrototypeSfx();
+  }, []);
+
+  const goToTrackReferralFull = () => {
+    void unlockPrototypeSfx();
+    if (flow !== "track-referral") {
+      setTrackReturnTo(flow);
+    }
+    setTrackState("full");
+    setFlow("track-referral");
+  };
+
+  const selectFlow = (id: FlowId) => {
+    if (soundOn && (id === "slideup1" || id === "slideup2" || id === "slideup4")) {
+      playPrototypeSfx("bonus");
+    } else {
+      void unlockPrototypeSfx();
+    }
+    if (id === "track-referral" && flow !== "track-referral") {
+      setTrackReturnTo(flow);
+    }
+    setFlow(id);
+  };
+
+  const returnFromTrackReferral = () => {
+    selectFlow(trackReturnTo);
+  };
 
   let screen = null;
   switch (flow) {
     case "slideup1":
-      screen = <DuelVictoryScreen autoToast={false} />;
+      screen = (
+        <DuelVictoryScreen
+          autoToast={false}
+          inviteOutcome={toast}
+          onSuccessToastClick={goToTrackReferralFull}
+        />
+      );
       break;
     case "slideup2":
-      screen = <PassThrillHikeScreen autoToast={false} />;
+      screen = (
+        <PassThrillHikeScreen
+          autoToast={false}
+          inviteOutcome={toast}
+          onSuccessToastClick={goToTrackReferralFull}
+        />
+      );
       break;
     case "slideup3":
-      screen = <LoomSlideUpScreen />;
+      screen = (
+        <LoomSlideUpScreen
+          inviteOutcome={toast}
+          onSuccessToastClick={goToTrackReferralFull}
+        />
+      );
       break;
     case "slideup4":
-      screen = <PuzzleCompletionScreen />;
+      screen = (
+        <PuzzleCompletionScreen
+          inviteOutcome={toast}
+          onSuccessToastClick={goToTrackReferralFull}
+        />
+      );
       break;
     case "track-referral":
-      screen = <TrackReferralScreen empty={trackState === "empty"} />;
+      screen = (
+        <TrackReferralScreen
+          empty={trackState === "empty"}
+          inviteOutcome={toast}
+          onFriendArrived={() => setTrackState("full")}
+          onReturn={returnFromTrackReferral}
+        />
+      );
       break;
   }
 
   return (
-    <div className="prototype-flow">
-      <IPhoneFrame>
-        <div className="prototype-flow__stage" key={flow}>
-          {screen}
-          {toast !== "off" && !trackSelected ? (
-            <div className="prototype-flow__toast">
-              {toast === "friend" ? <MatiksToast variant="friend" /> : null}
-              {toast === "failed" ? <MatiksToast variant="failed" /> : null}
-              {toast === "wifi" ? <MatiksToast variant="wifi" /> : null}
-            </div>
-          ) : null}
-        </div>
-      </IPhoneFrame>
+    <PrototypePrefsProvider
+      soundOn={soundOn}
+      animationsOn={animationsOn}
+      setSoundOn={setSoundOn}
+      setAnimationsOn={setAnimationsOn}
+    >
+      <div
+        className={`prototype-flow${animationsOn ? "" : " prototype-flow--static"}`}
+        onPointerDownCapture={() => {
+          void unlockPrototypeSfx();
+        }}
+      >
+        <IPhoneFrame>
+          <div
+            className="prototype-flow__stage"
+            key={`${flow}-${reloadKey}`}
+          >
+            {screen}
+          </div>
+        </IPhoneFrame>
 
-      <aside className="prototype-flow__controls" aria-label="Prototype controls">
-        <CaseSegmentedControl
-          label="Flow"
-          value={flow}
-          options={FLOW_OPTIONS}
-          onChange={setFlow}
-        />
-        <CaseSegmentedControl
-          label="Toast"
-          value={toast}
-          options={TOAST_OPTIONS}
-          onChange={setToast}
-          disabled={trackSelected}
-        />
-        <CaseSegmentedControl
-          label="Track Referral"
-          value={trackState}
-          options={TRACK_OPTIONS}
-          onChange={setTrackState}
-          disabled={!trackSelected}
-        />
-      </aside>
-    </div>
+        <aside
+          className="prototype-flow__controls"
+          aria-label="Prototype controls"
+        >
+          <div className="case-seg">
+            <p className="case-seg__label">Tools</p>
+            <div className="prototype-flow__tools-row">
+              <button
+                type="button"
+                className="prototype-flow__reload"
+                aria-label="Reload screen"
+                title="Reload"
+                onClick={() => {
+                  void unlockPrototypeSfx();
+                  if (
+                    soundOn &&
+                    (flow === "slideup1" ||
+                      flow === "slideup2" ||
+                      flow === "slideup4")
+                  ) {
+                    playPrototypeSfx("bonus");
+                  }
+                  setReloadKey((n) => n + 1);
+                }}
+              >
+                <ReloadIcon />
+              </button>
+              <div className="prototype-flow__toggles" role="group" aria-label="Tools">
+                <button
+                  type="button"
+                  className={`prototype-flow__toggle${soundOn ? " prototype-flow__toggle--on" : ""}`}
+                  aria-pressed={soundOn}
+                  onClick={() => setSoundOn(!soundOn)}
+                >
+                  <span className="prototype-flow__toggle-copy">
+                    <SoundIcon on={soundOn} />
+                    Sound
+                  </span>
+                  <span className="prototype-flow__switch" aria-hidden>
+                    <span className="prototype-flow__switch-knob" />
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className={`prototype-flow__toggle${animationsOn ? " prototype-flow__toggle--on" : ""}`}
+                  aria-pressed={animationsOn}
+                  onClick={() => {
+                    setAnimationsOn((v) => !v);
+                    setReloadKey((n) => n + 1);
+                  }}
+                >
+                  <span className="prototype-flow__toggle-copy">
+                    <MotionIcon on={animationsOn} />
+                    Motion
+                  </span>
+                  <span className="prototype-flow__switch" aria-hidden>
+                    <span className="prototype-flow__switch-knob" />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <CaseSegmentedControl
+            label="Flow"
+            value={flow}
+            options={FLOW_OPTIONS}
+            onChange={selectFlow}
+          />
+          <CaseSegmentedControl
+            label="Toast"
+            value={toast}
+            options={TOAST_OPTIONS}
+            onChange={setToast}
+            note={
+              toast === "success"
+                ? "Appears after you leave and reopen the app, when a referred friend has joined. Outside-app steps aren't built here."
+                : undefined
+            }
+          />
+          <CaseSegmentedControl
+            label="Track Referral"
+            value={trackState}
+            options={TRACK_OPTIONS}
+            onChange={setTrackState}
+            disabled={!trackSelected}
+          />
+        </aside>
+      </div>
+    </PrototypePrefsProvider>
   );
 }

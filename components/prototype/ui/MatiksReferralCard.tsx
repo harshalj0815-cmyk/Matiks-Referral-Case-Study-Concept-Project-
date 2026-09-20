@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import MatiksButton from "@/components/prototype/ui/MatiksButton";
 import MatiksChip from "@/components/prototype/ui/MatiksChip";
 
@@ -17,7 +20,7 @@ type MatiksReferralCardProps = {
 
 export default function MatiksReferralCard({
   name = "Suyash",
-  joinedLabel = "Joined in August, 2026",
+  joinedLabel = "Joined in July, 2026",
   avatarSrc = "/prototype/matiks/elements/avatar-suyash.jpg",
   avatarColor = "#7a1fa2",
   mode,
@@ -28,6 +31,8 @@ export default function MatiksReferralCard({
   onClaim,
   className = "",
 }: MatiksReferralCardProps) {
+  const [sent, setSent] = useState(false);
+  const [claimed, setClaimed] = useState(false);
   const progress = Math.max(0, Math.min(100, (xp / xpGoal) * 100));
 
   return (
@@ -52,14 +57,27 @@ export default function MatiksReferralCard({
         <MatiksChip
           leadingIcon={
             <img
-              src="/prototype/matiks/icons/user-plus.svg"
+              src={
+                sent
+                  ? "/prototype/matiks/icons/x.svg"
+                  : "/prototype/matiks/icons/user-plus.svg"
+              }
               alt=""
               aria-hidden
             />
           }
-          onClick={onAdd}
+          onClick={() => {
+            if (sent) {
+              setSent(false);
+              return;
+            }
+            setSent(true);
+            onAdd?.();
+          }}
+          aria-pressed={sent}
+          aria-label={sent ? "Sent, click to undo" : `Add ${name}`}
         >
-          Add
+          {sent ? "Sent" : "Add"}
         </MatiksChip>
       </div>
 
@@ -95,12 +113,25 @@ export default function MatiksReferralCard({
         <MatiksButton
           variant="secondary"
           fullWidth
+          disabled={claimed}
           trailingIcon={
-            <img src="/prototype/matiks/icons/gift.svg" alt="" aria-hidden />
+            <img
+              src={
+                claimed
+                  ? "/prototype/matiks/icons/check.svg"
+                  : "/prototype/matiks/icons/gift.svg"
+              }
+              alt=""
+              aria-hidden
+            />
           }
-          onClick={onClaim}
+          onClick={() => {
+            if (claimed) return;
+            setClaimed(true);
+            onClaim?.();
+          }}
         >
-          Claim Reward
+          {claimed ? "Claimed" : "Claim Reward"}
         </MatiksButton>
       )}
     </article>

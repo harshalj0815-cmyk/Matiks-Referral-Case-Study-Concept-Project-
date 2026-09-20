@@ -9,6 +9,8 @@ import {
   MatiksTextLink,
 } from "@/components/prototype/ui";
 import CloseGameSlideUp from "@/components/prototype/screens/CloseGameSlideUp";
+import type { InviteToastOutcome } from "@/components/prototype/screens/CloseGameSlideUp";
+import { usePrototypePrefs } from "@/components/prototype/PrototypePrefs";
 
 const PUZZLES = [
   {
@@ -34,9 +36,16 @@ const PUZZLES = [
   },
 ];
 
-export default function PuzzleCompletionScreen() {
+export default function PuzzleCompletionScreen({
+  inviteOutcome,
+  onSuccessToastClick,
+}: {
+  inviteOutcome?: InviteToastOutcome | null;
+  onSuccessToastClick?: () => void;
+}) {
   const cardsRef = useRef<HTMLDivElement>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const { animationsOn } = usePrototypePrefs();
+  const [sheetOpen, setSheetOpen] = useState(!animationsOn);
 
   useEffect(() => {
     const row = cardsRef.current;
@@ -58,9 +67,15 @@ export default function PuzzleCompletionScreen() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSheetOpen(true), 3000);
+    if (!animationsOn) {
+      setSheetOpen(true);
+      return undefined;
+    }
+
+    // Sheet opens 1.5s after mount.
+    const timer = window.setTimeout(() => setSheetOpen(true), 1500);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [animationsOn]);
 
   return (
     <div className="puzzle-complete">
@@ -211,6 +226,11 @@ export default function PuzzleCompletionScreen() {
         variant="puzzle"
         artFit="natural"
         artSrc="/prototype/matiks/elements/new-record-slide-up.png"
+        title="Your Brain Just Leveled Up"
+        bodyBefore="You're getting sharper a friend could too. Invite them and you'll both"
+        highlight="get 50 Pies."
+        inviteOutcome={inviteOutcome}
+        onSuccessToastClick={onSuccessToastClick}
       />
     </div>
   );

@@ -7,6 +7,9 @@ import {
   MatiksTextLink,
   MatiksToast,
 } from "@/components/prototype/ui";
+import { usePrototypePrefs } from "@/components/prototype/PrototypePrefs";
+
+export type InviteToastOutcome = "success" | "fail1" | "fail2";
 
 type CloseGameSlideUpProps = {
   open: boolean;
@@ -23,6 +26,13 @@ type CloseGameSlideUpProps = {
   highlight?: string;
   /** Extra class for screen-specific spacing (e.g. Loom) */
   className?: string;
+  /**
+   * Which toast to show after Invite Now → Sending Invite…
+   * Defaults to fail1 when omitted (standalone routes).
+   */
+  inviteOutcome?: InviteToastOutcome | null;
+  /** Fired when the success (friend) toast is clicked */
+  onSuccessToastClick?: () => void;
 };
 
 export default function CloseGameSlideUp({
@@ -35,17 +45,24 @@ export default function CloseGameSlideUp({
   bodyBefore = "That was a nail-biter and you made it. Invite a friend and you'll both",
   highlight = "get 50 Pies.",
   className = "",
+  inviteOutcome = "fail1",
+  onSuccessToastClick,
 }: CloseGameSlideUpProps) {
+  const { animationsOn } = usePrototypePrefs();
   const [visible, setVisible] = useState(open);
-  const [entered, setEntered] = useState(false);
+  const [entered, setEntered] = useState(open && !animationsOn);
   const [sending, setSending] = useState(false);
-  const [inviteFailed, setInviteFailed] = useState(false);
+  const [result, setResult] = useState<InviteToastOutcome | null>(null);
 
   useEffect(() => {
     if (open) {
       setSending(false);
-      setInviteFailed(false);
+      setResult(null);
       setVisible(true);
+      if (!animationsOn) {
+        setEntered(true);
+        return undefined;
+      }
       const frame = requestAnimationFrame(() => {
         requestAnimationFrame(() => setEntered(true));
       });
@@ -53,18 +70,32 @@ export default function CloseGameSlideUp({
     }
 
     setEntered(false);
+    if (!animationsOn) {
+      setVisible(false);
+      return undefined;
+    }
     const hide = window.setTimeout(() => setVisible(false), 280);
     return () => window.clearTimeout(hide);
-  }, [open]);
+  }, [open, animationsOn]);
 
   useEffect(() => {
     if (!sending) return undefined;
-    const fail = window.setTimeout(() => {
+    const outcome = inviteOutcome ?? "fail1";
+    const delay = animationsOn ? 1600 : 0;
+    const done = window.setTimeout(() => {
       setSending(false);
-      setInviteFailed(true);
-    }, 1600);
-    return () => window.clearTimeout(fail);
+      setResult(outcome);
+    }, delay);
+    return () => window.clearTimeout(done);
+    // Capture outcome when send starts — changing Toast control mid-send
+    // must not swap the toast; next Invite Now uses the new selection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional
   }, [sending]);
+
+  // Toast control only picks the next outcome; clear any visible toast until Invite Now
+  useEffect(() => {
+    setResult(null);
+  }, [inviteOutcome]);
 
   if (!visible) return null;
 
@@ -78,6 +109,11 @@ export default function CloseGameSlideUp({
   ]
     .filter(Boolean)
     .join(" ");
+
+  const retry = () => {
+    setResult(null);
+    setSending(true);
+  };
 
   return (
     <div
@@ -95,18 +131,22 @@ export default function CloseGameSlideUp({
       />
 
       <div className="close-game__top">
-        {!inviteFailed ? <MatiksChip>See Terms</MatiksChip> : null}
+        {!result ? <MatiksChip>See Terms</MatiksChip> : null}
       </div>
 
-      {inviteFailed ? (
+      {result === "success" ? (
         <div className="close-game__toast">
-          <MatiksToast
-            variant="failed"
-            onRetry={() => {
-              setInviteFailed(false);
-              setSending(true);
-            }}
-          />
+          <MatiksToast variant="friend" onClick={onSuccessToastClick} />
+        </div>
+      ) : null}
+      {result === "fail1" ? (
+        <div className="close-game__toast">
+          <MatiksToast variant="failed" onRetry={retry} />
+        </div>
+      ) : null}
+      {result === "fail2" ? (
+        <div className="close-game__toast">
+          <MatiksToast variant="wifi" onRetry={retry} />
         </div>
       ) : null}
 
@@ -132,8 +172,9 @@ export default function CloseGameSlideUp({
           <MatiksButton
             variant="primary"
             fullWidth
+            shine={!sending}
             onClick={() => {
-              setInviteFailed(false);
+              setResult(null);
               setSending(true);
             }}
             aria-busy={sending}

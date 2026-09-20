@@ -25,6 +25,8 @@
   --proto-danger: #ff5a5a;
   --proto-btn-border: 2.5px;
   --proto-btn-rise: 4px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
   --case-ink: #282828;
   --case-mute: #555555;
@@ -79,6 +81,136 @@
   font-family: var(--font-figtree), "Figtree", sans-serif;
 }
 
+.prototype-flow__tools-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.prototype-flow__toggles {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prototype-flow__toggle {
+  appearance: none;
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  height: 36px;
+  padding: 0 10px 0 12px;
+  border: 1px solid rgba(40, 40, 40, 0.08);
+  border-radius: 12px;
+  background: var(--case-wash);
+  color: var(--case-mute);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.prototype-flow__toggle-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.prototype-flow__toggle-copy svg {
+  flex-shrink: 0;
+}
+
+.prototype-flow__switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: #d0d0d0;
+  transition: background 160ms ease;
+}
+
+.prototype-flow__switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  transition: transform 160ms ease;
+}
+
+.prototype-flow__toggle--on {
+  color: #1e1e1e;
+  border-color: rgba(40, 40, 40, 0.12);
+  background: #ececec;
+}
+
+.prototype-flow__toggle--on .prototype-flow__switch {
+  background: var(--case-ink);
+}
+
+.prototype-flow__toggle--on .prototype-flow__switch-knob {
+  transform: translateX(14px);
+}
+
+.prototype-flow__toggle:focus-visible {
+  outline: 2px solid var(--case-ink);
+  outline-offset: 2px;
+}
+
+.prototype-flow__reload {
+  appearance: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--case-ink);
+  color: var(--case-on-ink);
+  cursor: pointer;
+}
+
+.prototype-flow__reload:focus-visible {
+  outline: 2px solid var(--case-ink);
+  outline-offset: 2px;
+}
+
+/* Static mode: skip entrance / sheet / flair motion inside the phone */
+.prototype-flow--static .iphone-frame__screen *,
+.prototype-flow--static .iphone-frame__screen *::before,
+.prototype-flow--static .iphone-frame__screen *::after {
+  animation: none !important;
+  animation-delay: 0s !important;
+  transition: none !important;
+}
+
+.prototype-flow--static .close-game--invite.close-game--open .close-game__sheet {
+  transform: translateY(0);
+}
+
+.prototype-flow--static .close-game__overlay,
+.prototype-flow--static .close-game__top {
+  opacity: 1;
+}
+
 .case-seg {
   display: flex;
   flex-direction: column;
@@ -111,6 +243,14 @@
   background: var(--case-wash);
   border-radius: 999px;
   padding: 5px;
+}
+
+.case-seg__note {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--case-mute);
 }
 
 .case-seg__option {
@@ -318,8 +458,12 @@
   transform: translate(-50%, -50%);
   transform-origin: center center;
   pointer-events: none;
-  will-change: transform;
-  animation: duel-flair-spin 28s linear infinite;
+  will-change: transform, opacity;
+  opacity: 0;
+  /* Entrance finishes ~480ms; flair reveals slower after that */
+  animation:
+    mk-flair-fade-in 720ms var(--ease-out) 560ms forwards,
+    duel-flair-spin 28s linear 560ms infinite;
 }
 
 .duel-victory__flair {
@@ -330,7 +474,7 @@
   object-position: center center;
   opacity: 0.85;
   will-change: opacity;
-  animation: duel-flair-breathe 3.2s ease-in-out infinite;
+  animation: duel-flair-breathe 3.2s ease-in-out 1280ms infinite;
 }
 
 @keyframes duel-flair-spin {
@@ -349,14 +493,32 @@
   }
 }
 
+@keyframes mk-flair-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .duel-victory__flair-spin,
-  .duel-victory__flair {
-    animation: none;
+  .duel-victory__flair-spin {
+    animation: mk-flair-fade-in 220ms ease 280ms forwards;
   }
 
   .duel-victory__flair {
+    animation: none;
     opacity: 0.85;
+  }
+
+  .duel-victory__top,
+  .duel-victory__mascot,
+  .duel-victory__card,
+  .duel-victory__score--win,
+  .duel-victory__actions,
+  .duel-victory__feedback {
+    animation: mk-screen-fade 180ms ease both;
   }
 }
 
@@ -368,6 +530,8 @@
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 40ms;
 }
 
 .duel-victory__chip,
@@ -438,6 +602,8 @@
   pointer-events: none;
   mix-blend-mode: lighten;
   filter: none;
+  animation: mk-screen-enter 280ms var(--ease-out) both;
+  animation-delay: 140ms;
 }
 
 .duel-victory__card {
@@ -459,6 +625,9 @@
   flex-direction: column;
   box-shadow: none;
   overflow: hidden;
+  transform-origin: center center;
+  animation: mk-card-scale 280ms var(--ease-out) both;
+  animation-delay: 100ms;
 }
 
 .duel-victory__title {
@@ -499,6 +668,8 @@
 
 .duel-victory__score--win {
   color: var(--proto-lime);
+  animation: mk-score-pop 260ms var(--ease-out) both;
+  animation-delay: 180ms;
 }
 
 .duel-victory__score--lose {
@@ -653,6 +824,8 @@
   margin-bottom: 6px;
   flex-shrink: 0;
   padding-bottom: 8px;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 200ms;
 }
 
 .duel-victory__btn {
@@ -687,6 +860,8 @@
   z-index: 5;
   left: 24px;
   bottom: 38px;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 240ms;
 }
 
 .duel-victory__feedback .mk-chip__icon img {
@@ -721,7 +896,8 @@
 
 .close-game__top {
   position: absolute;
-  top: 64px;
+  /* Match .duel-victory / .puzzle-complete top padding so See Terms lines up with Home/Share */
+  top: 58px;
   left: 24px;
   right: 24px;
   z-index: 2;
@@ -757,8 +933,8 @@
   border-radius: 16px 16px 0 0;
   background: radial-gradient(
     61.52% 115.43% at 50% 38.48%,
-    var(--proto-card-start) 0%,
-    var(--proto-card-end) 61.54%
+    #2c2c2c 0%,
+    #1e1e1e 72%
   );
   transform: translateY(110%);
   transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
@@ -868,24 +1044,24 @@
   padding-bottom: 0;
 }
 
-/* Loom Slide up — Paper 1UJ-0 spacing */
+/* Loom Slide up — Paper 1UL-0 */
 .close-game--loom.close-game--invite.close-game--art-natural .close-game__sheet {
   padding-bottom: 34px;
+}
+
+/* Full-bleed art without clipping the -81px peek above the sheet */
+.close-game--loom.close-game--invite .close-game__art-wrap {
+  align-self: stretch;
+  width: auto;
+  margin: -81px -24px 0;
   overflow: visible;
 }
 
-.close-game--loom.close-game--art-natural .close-game__art-wrap {
-  /* Full-bleed; pull sky flush with sheet top so cats peek above */
-  margin: -80px -24px 0;
-  width: calc(100% + 48px);
-  overflow: visible;
-  line-height: 0;
-}
-
-.close-game--loom.close-game--art-natural .close-game__art {
+.close-game--loom.close-game--invite .close-game__art {
   display: block;
   width: 100%;
   height: auto;
+  max-width: none;
   object-fit: contain;
   object-position: center top;
 }
@@ -943,14 +1119,19 @@
 }
 
 .mk-btn {
+  --mk-btn-shelf: var(--proto-lime-deep);
   appearance: none;
   display: inline-flex;
   width: auto;
-  padding: 0 0 var(--proto-btn-rise);
-  margin: 0;
+  padding: 0;
+  /* Reserve shelf height so press translateY doesn't shove the card */
+  margin: 0 0 var(--proto-btn-rise);
   border: none;
   border-radius: var(--proto-radius-button);
-  background: var(--proto-lime-deep);
+  /* Same as shelf so scaled phones don't show a hairline of the dark sheet */
+  background: var(--mk-btn-shelf);
+  /* Offset+spread overlap the face bottom so the dark sheet can't bleed through */
+  box-shadow: 0 calc(var(--proto-btn-rise) - 1px) 0 1px var(--mk-btn-shelf);
   cursor: default;
   font-family: inherit;
   vertical-align: top;
@@ -961,6 +1142,7 @@
 }
 
 .mk-btn__face {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -973,13 +1155,34 @@
   border: var(--proto-btn-border) solid var(--proto-lime-deep);
   background: var(--proto-lime);
   color: #000;
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: mk-btn-face;
 }
 
 .mk-btn__label {
+  position: relative;
+  z-index: 1;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.01em;
+}
+
+.mk-btn__icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.mk-btn__icon img,
+.mk-btn__icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
 }
 
 .mk-btn--md .mk-btn__face {
@@ -991,7 +1194,7 @@
 }
 
 .mk-btn--secondary {
-  background: var(--proto-plate);
+  --mk-btn-shelf: var(--proto-plate);
 }
 
 .mk-btn--secondary .mk-btn__face {
@@ -1004,9 +1207,24 @@
   font-weight: 500;
 }
 
+/* Claimed keeps Claim Reward type; only mute via opacity */
+.mk-btn--secondary:disabled .mk-btn__face,
+.mk-btn--secondary.mk-btn--disabled .mk-btn__face {
+  background: var(--proto-page);
+  border-color: var(--proto-plate);
+  color: #fff;
+  opacity: 0.55;
+}
+
+.mk-btn--secondary:disabled .mk-btn__label,
+.mk-btn--secondary.mk-btn--disabled .mk-btn__label {
+  font-weight: 500;
+  color: #fff;
+}
+
 .mk-btn--disabled,
 .mk-btn:disabled {
-  background: var(--proto-plate);
+  --mk-btn-shelf: var(--proto-plate);
   cursor: default;
   pointer-events: none;
 }
@@ -1023,39 +1241,126 @@
   font-weight: 500;
 }
 
-.mk-btn__icon {
-  display: inline-flex;
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+/* 3D press: sink via transform only — keep margin so the sheet layout never shifts */
+.mk-btn:not(:disabled):not(.mk-btn--disabled) {
+  cursor: pointer;
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease;
 }
 
-.mk-btn__icon img,
-.mk-btn__icon svg {
+.mk-btn:not(:disabled):not(.mk-btn--disabled):active {
+  transform: translateY(var(--proto-btn-rise));
+  box-shadow: none;
+}
+
+/* Paper 1XZ-0 — two parallel parallelograms (thick + thin), L→R every 5s */
+.mk-btn__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.mk-btn__shine-group {
+  position: absolute;
+  top: -55%;
+  left: 0;
+  height: 210%;
+  display: flex;
+  align-items: stretch;
+  /* Gap must stay clear under phone scale so thick+thin don't merge */
+  gap: 11px;
+  width: max-content;
+  transform: skewX(-22deg) translateX(-48px);
+  animation: mk-btn-shine 5s linear infinite;
+  will-change: transform, opacity;
+}
+
+.mk-btn__shine-bar {
   display: block;
-  width: 18px;
-  height: 18px;
+  flex: 0 0 auto;
+  height: 100%;
+}
+
+/* Paper: thick parallelogram + thinner twin — solid, no soft gradient smear */
+.mk-btn__shine-bar--thick {
+  width: 10px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mk-btn__shine-bar--thin {
+  width: 3.5px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+@keyframes mk-btn-shine {
+  0%,
+  10% {
+    transform: skewX(-22deg) translateX(-48px);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  40% {
+    transform: skewX(-22deg) translateX(calc(100cqw + 48px));
+    opacity: 1;
+  }
+  44%,
+  100% {
+    transform: skewX(-22deg) translateX(calc(100cqw + 48px));
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-btn__shine-group {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 .mk-chip {
+  --mk-chip-shelf: var(--proto-plate);
   appearance: none;
   display: inline-flex;
-  padding: 0 0 var(--proto-btn-rise);
-  margin: 0;
+  padding: 0;
+  /* Reserve shelf height; paint shelf with shadow so scale can't skew the face */
+  margin: 0 0 var(--proto-btn-rise);
   border: none;
   border-radius: var(--proto-radius-chip);
-  background: var(--proto-plate);
-  cursor: default;
+  background: var(--mk-chip-shelf);
+  box-shadow: 0 calc(var(--proto-btn-rise) - 1px) 0 1px var(--mk-chip-shelf);
+  cursor: pointer;
   font-family: inherit;
   flex-shrink: 0;
   vertical-align: top;
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease;
+}
+
+.mk-chip:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.mk-chip:not(:disabled):active {
+  transform: translateY(var(--proto-btn-rise));
+  box-shadow: none;
 }
 
 .mk-chip__face {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  width: 100%;
   min-height: 36px;
   box-sizing: border-box;
   padding: 10px 8px;
@@ -1278,20 +1583,43 @@
 
 .mk-toast--friend {
   padding: 8px;
+  min-height: 76px;
 }
 
+.mk-toast--clickable {
+  appearance: none;
+  display: block;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Paper Toast2 — 354×64, fill #1e1e1e, 12px pad around 40px Retry chip */
 .mk-toast--failed,
 .mk-toast--wifi {
+  height: 64px;
+  min-height: 64px;
+  padding: 12px;
   border-radius: 16px;
-  padding: 8px;
-  min-height: 76px;
+  background: var(--proto-card-end);
 }
 
 .mk-toast__row {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.mk-toast--friend .mk-toast__row {
   min-height: 60px;
+}
+
+.mk-toast--failed .mk-toast__row,
+.mk-toast--wifi .mk-toast__row {
+  height: 40px;
+  min-height: 40px;
 }
 
 .mk-toast__mascot {
@@ -1307,8 +1635,8 @@
 .mk-toast__wifi-icon {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   border-radius: var(--proto-radius-chip);
   background: #181818;
@@ -1364,20 +1692,109 @@
 }
 
 .duel-victory__toast,
-.close-game__toast {
+.close-game__toast,
+.track-referral__toast {
   position: absolute;
-  top: 58px;
-  left: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
-  width: 354px;
-  max-width: calc(100% - 24px);
-  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  padding: 58px 12px 32px;
+  box-sizing: border-box;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.7) 42%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: mk-toast-slide-down 240ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.duel-victory__toast .mk-toast,
+.close-game__toast .mk-toast,
+.track-referral__toast .mk-toast {
+  width: 100%;
+  max-width: 354px;
   pointer-events: auto;
 }
 
 .close-game__toast {
-  top: 64px;
   z-index: 6;
+  padding-top: 64px;
+}
+
+@keyframes mk-toast-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Screen mount: celebration layers land in order */
+@keyframes mk-screen-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mk-score-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mk-card-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mk-screen-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .duel-victory__toast,
+  .close-game__toast,
+  .track-referral__toast {
+    animation: mk-toast-fade-in 180ms ease both;
+  }
+
+  @keyframes mk-toast-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 .mk-referral {
@@ -1389,8 +1806,9 @@
   flex-direction: column;
   gap: 16px;
   border-radius: var(--proto-radius-card);
-  border: 1px solid var(--proto-border-soft);
-  background: var(--proto-surface);
+  /* Paper 1VC-0 — card fill #282828 on #181818 page */
+  border: 1px solid #333333;
+  background: #282828;
   color: var(--proto-text);
 }
 
@@ -1418,6 +1836,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
 }
 
@@ -1438,10 +1857,23 @@
   white-space: nowrap;
 }
 
+/* Keep Add chip face centered with the avatar; shelf sits below the row */
+.mk-referral__header .mk-chip {
+  margin-top: 0;
+  margin-bottom: 0;
+  align-self: center;
+}
+
+.mk-referral__header .mk-chip:not(:disabled):active {
+  transform: none;
+}
+
 .mk-referral__progress {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  /* Room for 50 / 100 labels above the bar */
+  padding-top: 16px;
 }
 
 .mk-referral__track {
@@ -1463,8 +1895,8 @@
 .mk-referral__tick {
   position: absolute;
   top: 50%;
-  width: 1px;
-  height: 4px;
+  width: 1.5px;
+  height: 8px;
   transform: translate(-50%, -50%);
   background: #000;
   pointer-events: none;
@@ -1473,7 +1905,7 @@
 
 .mk-referral__mark {
   position: absolute;
-  top: -18px;
+  top: -16px;
   transform: translateX(-50%);
   font-size: 12px;
   font-weight: 600;
@@ -1489,6 +1921,78 @@
   font-weight: 500;
   line-height: 18px;
   color: var(--proto-lime-xp);
+}
+
+/* Referral card skeletons — bone shapes + breathe */
+.mk-referral--skeleton {
+  pointer-events: none;
+}
+
+.mk-skel {
+  display: block;
+  background: #333333;
+  border-radius: 6px;
+  animation: mk-skel-breathe 1.4s ease-in-out infinite;
+}
+
+.mk-skel--avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mk-skel--name {
+  width: 88px;
+  height: 16px;
+}
+
+.mk-skel--joined {
+  width: 148px;
+  height: 12px;
+  margin-top: 6px;
+}
+
+.mk-skel--chip {
+  width: 64px;
+  height: 36px;
+  border-radius: var(--proto-radius-chip);
+  flex-shrink: 0;
+}
+
+.mk-skel--claim {
+  width: 100%;
+  height: 45px;
+  border-radius: var(--proto-radius-button);
+}
+
+.mk-skel--bar {
+  width: 100%;
+  height: 4px;
+  border-radius: 3px;
+}
+
+.mk-skel--xp {
+  width: 72px;
+  height: 12px;
+  margin-left: auto;
+}
+
+@keyframes mk-skel-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-skel {
+    animation: none;
+    opacity: 0.65;
+  }
 }
 
 /* —— Puzzle Completion —— */
@@ -1517,8 +2021,11 @@
   transform: translate(-50%, -50%);
   transform-origin: center center;
   pointer-events: none;
-  will-change: transform;
-  animation: duel-flair-spin 28s linear infinite;
+  will-change: transform, opacity;
+  opacity: 0;
+  animation:
+    mk-flair-fade-in 720ms var(--ease-out) 560ms forwards,
+    duel-flair-spin 28s linear 560ms infinite;
 }
 
 .puzzle-complete__flair {
@@ -1529,7 +2036,7 @@
   object-position: center center;
   opacity: 0.42;
   will-change: opacity;
-  animation: puzzle-flair-breathe 3.2s ease-in-out infinite;
+  animation: puzzle-flair-breathe 3.2s ease-in-out 1280ms infinite;
 }
 
 @keyframes puzzle-flair-breathe {
@@ -1543,13 +2050,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .puzzle-complete__flair-spin,
-  .puzzle-complete__flair {
-    animation: none;
+  .puzzle-complete__flair-spin {
+    animation: mk-flair-fade-in 220ms ease 280ms forwards;
   }
 
   .puzzle-complete__flair {
+    animation: none;
     opacity: 0.42;
+  }
+
+  .puzzle-complete__top,
+  .puzzle-complete__hero,
+  .puzzle-complete__timer-card,
+  .puzzle-complete__more,
+  .puzzle-complete__footer {
+    animation: mk-screen-fade 180ms ease both;
   }
 }
 
@@ -1562,6 +2077,8 @@
   gap: 12px;
   flex-shrink: 0;
   width: 100%;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 40ms;
 }
 
 .puzzle-complete__top-right {
@@ -1581,6 +2098,8 @@
   gap: 14px;
   margin-top: 36px;
   flex-shrink: 0;
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 100ms;
 }
 
 .puzzle-complete__average {
@@ -1659,6 +2178,8 @@
   );
   box-shadow: rgba(0, 0, 0, 0.37) 0 3px 8.2px 5px inset;
   overflow: hidden;
+  animation: mk-score-pop 280ms var(--ease-out) both;
+  animation-delay: 140ms;
 }
 
 .puzzle-complete__timer {
@@ -1732,6 +2253,8 @@
   margin-left: -24px;
   margin-right: -24px;
   padding: 0;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 180ms;
 }
 
 .puzzle-complete__more-head {
@@ -1820,6 +2343,8 @@
   align-items: stretch;
   gap: 12px;
   flex-shrink: 0;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 220ms;
 }
 
 .puzzle-complete__leaderboard {
@@ -1868,7 +2393,7 @@
 
 .pass-thrill__top {
   position: absolute;
-  top: 64px;
+  top: 58px;
   left: 24px;
   right: 24px;
   z-index: 4;
@@ -1928,8 +2453,8 @@
   border-top: 0.8px solid var(--proto-border-soft);
   background: radial-gradient(
     61.52% 115.43% at 50% 38.48%,
-    var(--proto-card-start) 0%,
-    var(--proto-card-end) 61.54%
+    #2c2c2c 0%,
+    #1e1e1e 72%
   );
   padding: 0 38px 21px;
   overflow: visible;
@@ -2007,6 +2532,8 @@
   align-items: flex-start;
   justify-content: space-between;
   flex-shrink: 0;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 40ms;
 }
 
 .track-referral__body {
@@ -2031,6 +2558,21 @@
   gap: 16px;
 }
 
+.track-referral__section:nth-child(1) {
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 80ms;
+}
+
+.track-referral__section:nth-child(1) .mk-referral {
+  animation: mk-card-scale 280ms var(--ease-out) both;
+  animation-delay: 120ms;
+}
+
+.track-referral__section:nth-child(2) {
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 160ms;
+}
+
 .track-referral__divider {
   width: 100%;
   height: 1px;
@@ -2053,6 +2595,16 @@
   gap: 12px;
 }
 
+.track-referral__cards .mk-referral:nth-child(1) {
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 200ms;
+}
+
+.track-referral__cards .mk-referral:nth-child(2) {
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 250ms;
+}
+
 .track-referral__empty {
   flex: 1;
   display: flex;
@@ -2071,6 +2623,8 @@
   font-weight: 500;
   line-height: 22px;
   color: #fff;
+  animation: mk-screen-enter 260ms var(--ease-out) both;
+  animation-delay: 80ms;
 }
 
 .track-referral__empty-body {
@@ -2080,6 +2634,8 @@
   font-weight: 400;
   line-height: 18px;
   color: #717171;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 140ms;
 }
 
 .track-referral__footer {
@@ -2087,9 +2643,23 @@
   width: 100%;
   max-width: 302px;
   margin: 16px auto 0;
+  animation: mk-screen-enter 240ms var(--ease-out) both;
+  animation-delay: 220ms;
 }
 
-/* Loom Slide up — Paper 1UJ-0 */
+@media (prefers-reduced-motion: reduce) {
+  .track-referral__top,
+  .track-referral__empty-title,
+  .track-referral__empty-body,
+  .track-referral__section,
+  .track-referral__section .mk-referral,
+  .track-referral__cards .mk-referral,
+  .track-referral__footer {
+    animation: mk-screen-fade 180ms ease both;
+  }
+}
+
+/* Loom Slide up — Paper 1UL-0 */
 .loom-slide {
   position: relative;
   width: 100%;

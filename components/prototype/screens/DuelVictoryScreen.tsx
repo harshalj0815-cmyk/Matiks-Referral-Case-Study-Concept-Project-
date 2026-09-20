@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import CloseGameSlideUp from "@/components/prototype/screens/CloseGameSlideUp";
+import type { InviteToastOutcome } from "@/components/prototype/screens/CloseGameSlideUp";
+import { usePrototypePrefs } from "@/components/prototype/PrototypePrefs";
 import { MatiksButton, MatiksChip, MatiksToast } from "@/components/prototype/ui";
 
 
@@ -56,6 +58,9 @@ type DuelVictoryScreenProps = {
   sheetBodyBefore?: string;
   /** When false, skip the timed friend toast (flow controls handle toasts) */
   autoToast?: boolean;
+  /** Toast shown after Invite Now → Sending Invite… */
+  inviteOutcome?: InviteToastOutcome | null;
+  onSuccessToastClick?: () => void;
 };
 
 export default function DuelVictoryScreen({
@@ -64,20 +69,29 @@ export default function DuelVictoryScreen({
   sheetTitle,
   sheetBodyBefore,
   autoToast = true,
+  inviteOutcome,
+  onSuccessToastClick,
 }: DuelVictoryScreenProps) {
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const { animationsOn } = usePrototypePrefs();
+  const [sheetOpen, setSheetOpen] = useState(!animationsOn);
   const [friendToast, setFriendToast] = useState(false);
 
   useEffect(() => {
+    if (!animationsOn) {
+      setSheetOpen(true);
+      return undefined;
+    }
+
+    // Sheet opens 1.5s after mount.
+    const sheetTimer = window.setTimeout(() => setSheetOpen(true), 1500);
     const toastTimer = autoToast
       ? window.setTimeout(() => setFriendToast(true), 700)
       : undefined;
-    const sheetTimer = window.setTimeout(() => setSheetOpen(true), 2000);
     return () => {
       if (toastTimer !== undefined) window.clearTimeout(toastTimer);
       window.clearTimeout(sheetTimer);
     };
-  }, [autoToast]);
+  }, [autoToast, animationsOn]);
 
   const winner = {
     score: 3,
@@ -249,6 +263,8 @@ export default function DuelVictoryScreen({
         artFit={sheetArtFit}
         title={sheetTitle}
         bodyBefore={sheetBodyBefore}
+        inviteOutcome={inviteOutcome}
+        onSuccessToastClick={onSuccessToastClick}
       />
     </div>
   );
