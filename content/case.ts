@@ -1,4 +1,29 @@
+export type TextPart = {
+  text: string;
+  highlight?: boolean;
+  emphasis?: boolean;
+};
+
+export type StackPart = {
+  id: string;
+  partTitle: string;
+  as?: "h2" | "h3";
+  descriptionParts: TextPart[];
+  moreParagraphs?: TextPart[][];
+  asBullets?: boolean;
+  visualCaption: string;
+  links?: { label: string; href: string }[];
+};
+
+export type StackSection = {
+  id: string;
+  label: string;
+  sectionTitle: string;
+  parts: StackPart[];
+};
+
 export const hero = {
+  sectionTitle: "Thumbnail",
   titleParts: [
     { text: "Refer " },
     { text: "inside play", highlight: true },
@@ -9,13 +34,73 @@ export const hero = {
     },
   ],
   meta: "Concept case study · Paper to lo-fi · About five screens",
-  visualCaption: "Project thumbnail. Screenshot not in yet.",
+  visualCaption: "Share the Thrill: Matiks Referral at Excite Moments",
+  visualSrc: "/case/thumbnail.png",
+  visualAlt:
+    "Share the Thrill: Matiks Referral at Excite Moments — concept case study cover with phones and mascot",
 };
 
-export const brief = {
-  sectionTitle: "Brief",
-  partTitle: "Refer inside play",
+export const featureContext: StackSection = {
+  id: "feature-context",
+  label: "Feature Context",
+  sectionTitle: "Feature Context",
+  parts: [
+    {
+      id: "what-is-feature",
+      partTitle: "What is the feature?",
+      as: "h2",
+      descriptionParts: [
+        { text: "Referral here is a " },
+        { text: "situation-based slide-up", highlight: true },
+        {
+          text: ". It asks players to share what they just felt by ",
+        },
+        {
+          text: "referring friends and family with a tracked invite, instead of only recommending the game in conversation",
+          highlight: true,
+        },
+        {
+          text: ". It shows up in the regular flow of play, ",
+        },
+        { text: "after a good moment in the game", highlight: true },
+        {
+          text: ", while that feeling is still fresh.",
+        },
+      ],
+      visualCaption: "Situation-based slide-up in play. Visual not in yet.",
+    },
+    {
+      id: "context",
+      partTitle: "Where it sits?",
+      as: "h3",
+      descriptionParts: [
+        { text: "For habitual players, the feature " },
+        { text: "sits in daily flow", highlight: true },
+        {
+          text: ", not tucked into a Settings corner they have to go hunting for. The ",
+        },
+        { text: "slide-ups show up in certain situations", highlight: true },
+        {
+          text: ": winning a close game, breaking your own puzzle completion record, or hitting a 50 day or 100 day streak. Even in that regular rhythm, the ask is capped so those slide-ups only ",
+        },
+        {
+          text: "appear once a week for any one of the situations",
+          highlight: true,
+        },
+        { text: "." },
+      ],
+      visualCaption: "Excite moments in daily play. Visual not in yet.",
+    },
+  ],
+};
+
+export const problemSection = {
+  id: "problem",
+  label: "Problem",
+  sectionTitle: "Specific problem this feature solves",
+  partTitle: "Problem with the current referral feature",
   descriptionParts: [
+    { text: "Problem Statement: ", emphasis: true },
     {
       text: "A 20 to 25 year old habitual Matiks user struggles with getting friends to try the game (and creating a tracked referral), because they did not know or ",
     },
@@ -27,82 +112,382 @@ export const brief = {
     { text: ", or they " },
     { text: "introduced it as a math game", highlight: true },
     { text: ", so interest dies before giving a try." },
-  ],
-  visualCaption: "Play to a sent link. Screenshot not in yet.",
-};
-
-export const aboutProduct = {
-  sectionTitle: "Product Overview",
-  partTitle: "What is matiks",
-  product: {
-    introParts: [
-      {
-        text: "Matiks is a math gaming app built around ",
-      },
-      { text: "competition and puzzle-solving", highlight: true },
-      {
-        text: ". It sharpens your thinking while you play and gives you something better to do than doomscroll. Instead of losing time on your phone, you are actually building a skill.",
-      },
-    ],
-    whyParts: [
-      { text: "Why Matiks?", emphasis: true },
-      {
-        text: " Because I have been ",
-      },
-      { text: "playing it for more than 300 days", highlight: true },
-      {
-        text: ", and it has genuinely made me better at mental math. That kind of daily use also means I ",
-      },
-      { text: "know the app inside out", highlight: true },
-      {
-        text: ": every feature, every quirk, which made writing this case study a lot easier.",
-      },
-    ],
-    visualCaption: "Product still or play moment. Screenshot not in yet.",
-  },
-  feature: {
-    partTitle: "Refer Feature: Current State",
+  ] as TextPart[],
+  implicationParts: [
+    {
+      text: "The path from \"I want my friend to try Matiks\" to \"my friend actually tries it\" has to get shorter and clearer. That path cannot depend on a spoken math pitch or the friend doing the homework alone.",
+    },
+  ] as TextPart[],
+  visualCaption: "Research quotes / problem evidence. Visual not in yet.",
+  solves: {
+    id: "how-redesign-solves-it",
+    partTitle: "How redesign solves it",
     descriptionParts: [
+      { text: "These moments are when players are " },
+      { text: "most excited and most willing to refer", highlight: true },
       {
-        text: "The refer feature ",
+        text: ". A close win feels like success worth sharing. A personal best on a puzzle, or a streak milestone, carries the same charge of having done something. Timing the ask there makes ",
       },
-      { text: "already exists", highlight: true },
+      { text: "a real refer more likely", highlight: true },
       {
-        text: " in Matiks, but it ",
+        text: ". People who arrived through a referral get their own slide-up later, asking them to refer someone. That is how the ",
       },
-      {
-        text: "does not feel like part of the core experience",
-        highlight: true,
-      },
-      {
-        text: ". It feels more like an afterthought. Instead of being visible on the main screen, it is ",
-      },
-      { text: "hidden inside settings", highlight: true },
-      {
-        text: " or ",
-      },
-      { text: "tucked into a corner", highlight: true },
-      {
-        text: " you only find after scrolling around looking for it. For something that could genuinely bring in new users, it deserves a lot more visibility than it currently gets.",
-      },
-    ],
-    visualCaption: "Where refer lives today. Screenshot not in yet.",
+      { text: "acquisition loop continues", highlight: true },
+      { text: "." },
+    ] as TextPart[],
+    visualCaption: "From excite moment to tracked invite. Visual not in yet.",
   },
 };
 
-export type TextPart = {
-  text: string;
-  highlight?: boolean;
-  emphasis?: boolean;
+export const researchSection: StackSection = {
+  id: "research",
+  label: "Research",
+  sectionTitle: "Research",
+  parts: [
+    {
+      id: "qualitative",
+      partTitle: "Qualitative research",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "I spoke with habitual Matiks players I already knew, and others from Discord and LinkedIn. Calls were transcribed, broken into atomic notes, and sorted into ",
+        },
+        { text: "affinity clusters", highlight: true },
+        {
+          text: " around share and refer friction. Five clusters came out of that work. The ones I kept were where friends lose interest after a bad pitch, and where people stick to ",
+        },
+        {
+          text: "talk or Play Store instead of the referral link",
+          highlight: true,
+        },
+        {
+          text: ". Refer also looked ",
+        },
+        { text: "hard to notice", highlight: true },
+        {
+          text: " in normal play, so discoverability stayed as an in-the-moment issue. I demoted the stronger claim that nobody knows the feature exists.",
+        },
+      ],
+      visualCaption: "Affinity clusters and interview notes. Visual not in yet.",
+    },
+    {
+      id: "quantitative",
+      partTitle: "Quantitative research",
+      as: "h3",
+      descriptionParts: [
+        {
+          text: "Quantitative research was a survey meant to ",
+        },
+        { text: "triangulate", highlight: true },
+        {
+          text: " what the interviews had shown. Responses came from Reddit, Discord, in-game chat, LinkedIn, and friends. Early replies were few and did not line up with qualitative research, so the sample got expanded. Even then, a lot of people said they ",
+        },
+        { text: "already knew refer existed", highlight: true },
+        {
+          text: ", which sat oddly next to interviews where it was ",
+        },
+        { text: "hard to discover", highlight: true },
+        {
+          text: ". Some of that gap may be priming, or people who don't want to look uninformed. I still moved ahead on the qualitative signal that discoverability was the real issue in play.",
+        },
+      ],
+      visualCaption: "Survey vs interview tension. Visual not in yet.",
+    },
+    {
+      id: "insights",
+      partTitle: "Insights",
+      as: "h3",
+      descriptionParts: [
+        {
+          text: "After the research, the main issue looked like ",
+        },
+        { text: "discoverability", highlight: true },
+        {
+          text: ". Few people were already referring through direct conversation, often because they were unaware of the feature, and because it sat deep inside Settings. The interview clusters also pointed at how to implement referral. Users get ",
+        },
+        { text: "excited at a particular moment", highlight: true },
+        {
+          text: " in the app. They also want to ",
+        },
+        { text: "share at a particular moment", highlight: true },
+        { text: "." },
+      ],
+      visualCaption: "Discoverability and excite moments. Visual not in yet.",
+    },
+  ],
 };
 
-export type CaseSectionContent = {
-  sectionTitle: string;
-  partTitle: string;
-  descriptionParts: TextPart[];
-  visualCaption: string;
+export const ideationSection: StackSection = {
+  id: "ideation",
+  label: "Ideation",
+  sectionTitle: "Ideation",
+  parts: [
+    {
+      id: "idea-explore",
+      partTitle: "Idea explore",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "Before locking situation slide-ups, I explored a ",
+        },
+        { text: "wide set of referral ideas", highlight: true },
+        {
+          text: " on paper. One early bet was ",
+        },
+        { text: "streak revoke", highlight: true },
+        {
+          text: ", where referrals would help restore a long broken streak. There was a browser trial so friends could try before install, and a Play Store trial game option that was removed by Play Store earlier. Another direction was a ",
+        },
+        { text: "Hyrox-like monthly tournament", highlight: true },
+        {
+          text: ": an event you enter with a ticket, and that ticket comes from referring someone. More ideas showed up along the way. Most died on research or platform limits. What stayed pointed at refer in play, rather than building a whole new acquisition product around events or trials.",
+        },
+      ],
+      visualCaption: "Paper ideas and killed bets. Visual not in yet.",
+    },
+    {
+      id: "design-iterations",
+      partTitle: "Design iterations",
+      as: "h3",
+      descriptionParts: [
+        {
+          text: "Design iterations were about tightening the pieces once the direction was clearer. I explored a lot of ",
+        },
+        { text: "card variations", highlight: true },
+        {
+          text: ", both look and feel and what the card could do, plus options for the CTA, ",
+        },
+        { text: "copywriting", highlight: true },
+        {
+          text: " variants, and multiple toast treatments. Separately, because I was building on the previous version of the Matiks app, I also redesigned the ",
+        },
+        { text: "victory and puzzle completion", highlight: true },
+        {
+          text: " screens the slide-up would ride on.",
+        },
+      ],
+      visualCaption: "Cards, CTA, copy, toast, and host screens. Visual not in yet.",
+    },
+  ],
 };
+
+export const decisionsSection: StackSection = {
+  id: "decisions",
+  label: "Decisions",
+  sectionTitle: "Key design decisions",
+  parts: [
+    {
+      id: "decisions-calls",
+      partTitle: "Decisions",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "Some of the important calls sat outside pure layout. I decided referred players should ",
+        },
+        { text: "start with a non-math first game", highlight: true },
+        {
+          text: " after the existing tutorial, so the first taste is not a cold math pitch. I decided that when someone shares a refer, it should ",
+        },
+        { text: "go out with the visual", highlight: true },
+        {
+          text: " from that moment, so the invite carries what they just felt, not only a bare link. I also decided that if a player leaves the app to refer, they get a ",
+        },
+        { text: "return nudge within about five minutes", highlight: true },
+        {
+          text: ", so the loop does not die in another app's share sheet.",
+        },
+      ],
+      visualCaption: "Decision board / FigJam. Visual not in yet.",
+    },
+    {
+      id: "trade-offs",
+      partTitle: "Trade-offs",
+      as: "h3",
+      descriptionParts: [
+        {
+          text: "I chose refer slide-ups after peak moments in play over a ",
+        },
+        { text: "streak-revoke referral feature", highlight: true },
+        {
+          text: " because survey data showed people ",
+        },
+        { text: "do not miss streaks very often", highlight: true },
+        {
+          text: ". The trade-off I accepted was a possible hit to how many people ",
+        },
+        { text: "start a new game right away", highlight: true },
+        {
+          text: ". That was acceptable because the metric is referrals per person per month, core play is a guardrail that must not get worse, and the ask only appears about once a week.",
+        },
+      ],
+      visualCaption: "Chosen path vs killed options. Visual not in yet.",
+    },
+  ],
+};
+
+export const finalDesignSection: StackSection = {
+  id: "final-design",
+  label: "Final design",
+  sectionTitle: "Final feature design",
+  parts: [
+    {
+      id: "final-feature-design",
+      partTitle: "Final feature design",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "This is an ",
+        },
+        { text: "interactive prototype", highlight: true },
+        {
+          text: " of the locked direction: ",
+        },
+        { text: "refer at peak moments", highlight: true },
+        {
+          text: ", with the follow-on beats in the flow. You can ",
+        },
+        { text: "drive the states yourself", highlight: true },
+        {
+          text: ". A few moments have light sound, and the motion is tuned so the slide-ups and toasts feel like the app, not a slideshow. Built as a concept on Matiks patterns, not the live product.",
+        },
+      ],
+      visualCaption: "Interactive prototype embed. Not in yet.",
+    },
+  ],
+};
+
+export const edgeCasesSection: StackSection = {
+  id: "edge-cases",
+  label: "Edge cases",
+  sectionTitle: "Edge cases",
+  parts: [
+    {
+      id: "edge-states",
+      partTitle: "Edge cases and state designs",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "Refer looks fine on the happy path. These frames cover the awkward ones: an ",
+        },
+        { text: "Invite fail", highlight: true },
+        {
+          text: " when something breaks on the technical or server side, a slow internet state, and a prompt to get back into the app after someone leaves to refer. Referral tracking needs a UI skeleton while data is loading, and an ",
+        },
+        { text: "empty state", highlight: true },
+        {
+          text: " when there is nothing to show yet. If someone taps refer again before anything happens, ",
+        },
+        { text: "Sending invite", highlight: true },
+        {
+          text: " copy shows so they know the action is working.",
+        },
+      ],
+      visualCaption: "Fail, slow, return, skeleton, empty, sending. Visual not in yet.",
+    },
+  ],
+};
+
+export const handoffSection: StackSection = {
+  id: "handoff",
+  label: "Handoff",
+  sectionTitle: "Handoff",
+  parts: [
+    {
+      id: "handoff-files",
+      partTitle: "Handoff",
+      as: "h2",
+      descriptionParts: [
+        {
+          text: "Handoff is the working files. ",
+        },
+        { text: "Figma", highlight: true },
+        {
+          text: " has the screens and components; ",
+        },
+        { text: "FigJam", highlight: true },
+        {
+          text: " has the flows and decision boards. Links below.",
+        },
+      ],
+      visualCaption: "Working files. Links when ready.",
+      links: [
+        { label: "Figma", href: "#" },
+        { label: "FigJam", href: "#" },
+      ],
+    },
+  ],
+};
+
+export const learningsSection: StackSection = {
+  id: "learnings",
+  label: "Learnings",
+  sectionTitle: "Learnings",
+  parts: [
+    {
+      id: "learnings-body",
+      partTitle: "Learnings",
+      as: "h2",
+      asBullets: true,
+      descriptionParts: [
+        {
+          text: "The assumptions I make before starting are ",
+        },
+        { text: "rarely the best decision", highlight: true },
+        {
+          text: ". Streak revoke looked clever until the survey showed people do not miss streaks that often, and the bet had to move to refer in play.",
+        },
+      ],
+      moreParagraphs: [
+        [
+          { text: "Interviews and surveys can disagree", highlight: true },
+          {
+            text: ", and that disagreement is useful. Quantitative replies said many people already knew refer existed; qualitative work still showed it was hard to discover in normal play. Sitting with that tension beat picking the flattering number.",
+          },
+        ],
+        [
+          {
+            text: "Putting the ask at peak moments helps a tracked refer land, but it ",
+          },
+          {
+            text: "costs something on the path to the next game",
+            highlight: true,
+          },
+          {
+            text: ". Caps, empty states, and fail toasts are part of the design, not leftovers.",
+          },
+        ],
+        [
+          {
+            text: "Building the prototype with AI and Paper (from Figma), plus light sound (UISFX and SoundCN) and tuned motion, made it easier to show the flow instead of only describing it.",
+          },
+        ],
+      ],
+      visualCaption: "Process notes and prototype craft. Visual not in yet.",
+    },
+  ],
+};
+
+/** Open-stack sections in page order (after thumbnail). */
+export const stackSections: StackSection[] = [
+  featureContext,
+  researchSection,
+  ideationSection,
+  decisionsSection,
+  finalDesignSection,
+  edgeCasesSection,
+  handoffSection,
+  learningsSection,
+];
 
 export const sections = [
-  { id: "about-product", label: "Product Overview", stub: false },
+  { id: "thumbnail", label: "Thumbnail" },
+  { id: "feature-context", label: "Feature Context" },
+  { id: "problem", label: "Problem" },
+  { id: "research", label: "Research" },
+  { id: "ideation", label: "Ideation" },
+  { id: "decisions", label: "Decisions" },
+  { id: "final-design", label: "Final design" },
+  { id: "edge-cases", label: "Edge cases" },
+  { id: "handoff", label: "Handoff" },
+  { id: "learnings", label: "Learnings" },
 ] as const;

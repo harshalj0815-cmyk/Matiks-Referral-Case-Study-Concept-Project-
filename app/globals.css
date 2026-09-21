@@ -3,6 +3,7 @@ body {
   margin: 0;
   font-family: var(--font-figtree), "Figtree", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  background: #f5f5f7;
 }
 
 html {
@@ -24,19 +25,17 @@ html.page-scrolled .site-header {
 }
 
 .scrollspy {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-}
-
-.scrollspy.is-visible,
-html.page-scrolled .scrollspy {
   opacity: 1;
+  transition: opacity 0.25s ease;
   pointer-events: auto;
 }
 
-.scrollspy a {
-  transition: width 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+.scrollspy-item {
+  pointer-events: auto;
+}
+
+.nav-desktop-tag {
+  display: none;
 }
 
 @media (max-width: 640px) {
@@ -44,8 +43,29 @@ html.page-scrolled .scrollspy {
     display: none;
   }
 
+  .nav-cta {
+    display: none;
+  }
+
+  .nav-desktop-tag {
+    display: inline-block;
+  }
+
   .scrollspy {
-    left: 10px !important;
+    display: none !important;
+  }
+
+  .scrollspy-item [role="tooltip"] {
+    display: none;
+  }
+
+  /* Keep the 4-line clamp on real text lines, not paragraph gaps. */
+  .expandable-body.is-collapsed > p {
+    margin-bottom: 0 !important;
+  }
+
+  .expandable-body.is-collapsed > ul {
+    gap: 0 !important;
   }
 }
 
@@ -56,7 +76,8 @@ html.page-scrolled .scrollspy {
 
   .site-header,
   .scrollspy,
-  .scrollspy a {
-    transition: none;
+  .scrollspy-item [role="tooltip"],
+  .scrollspy-item span {
+    transition: none !important;
   }
 }

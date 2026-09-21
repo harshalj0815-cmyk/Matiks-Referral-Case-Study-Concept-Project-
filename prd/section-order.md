@@ -1,7 +1,26 @@
-# Section order (product intro)
+After thumbnail (`#thumbnail`):
 
-After Brief:
+1. **Feature Context** — `#feature-context`
+   - `#what-is-feature` What is the feature?
+   - `#context` Where it sits?
+2. **Specific problem this feature solves** — `#problem`
+   - Problem with the current referral feature (locked statement + quotes)
+   - `#how-redesign-solves-it` How redesign solves it *(ex–How it works)*
+3. **Research** — `#research`
+   - `#qualitative` Qualitative research
+   - `#quantitative` Quantitative research
+   - `#insights` Insights
+4. **Ideation** — `#ideation`
+   - `#idea-explore` Idea explore
+   - `#design-iterations` Design iterations
+5. **Key design decisions** — `#decisions`
+   - `#decisions-calls` Decisions
+   - `#trade-offs` Trade-offs (locked lead)
+6. **Final feature design** — `#final-design`
+7. **Edge cases** — `#edge-cases`
+8. **Handoff** — `#handoff`
+9. **Learnings** — `#learnings`
 
-1. **About product & Feature** — Matiks (including why) and the refer feature in one section. Part title: Matiks & Refer feature.
+Impact stub stays out until filled.
 
-Same open-stack design language as Brief. Locked SCOPE / problem / research phrases stay verbatim. Explanations you supply go through humanizer.
+Same open-stack design language (`DESIGN.md`). Approved writing from `writing/` with skim highlight chips.

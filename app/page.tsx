@@ -1,48 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
-  AboutProductSection,
+  CaseStudyBody,
   ProjectThumbnailSection,
 } from "@/components/CaseSection";
-import { sections } from "@/content/case";
+import { ScrollSpyNav } from "@/components/ScrollSpyNav";
 
-const green = "#16c45a";
 const ink = "#282828";
-const mute = "#969696";
-const wash = "#f4f4f4";
-const board = "#ffffff";
-const barIdle = "#c8c8c8";
+const mute = "#555555";
+const board = "#f5f5f7";
+const onInk = "#ffffff";
 const contentWidth = "min(920px, calc(100% - 40px))";
 
 export default function Page() {
-  const [activeId, setActiveId] = useState(sections[0].id);
-
-  useEffect(() => {
-    const nodes = sections
-      .map((s) => document.getElementById(s.id))
-      .filter((n): n is HTMLElement => Boolean(n));
-    if (!nodes.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target.id) {
-          setActiveId(visible[0].target.id);
-        }
-      },
-      {
-        rootMargin: "-18% 0px -55% 0px",
-        threshold: [0, 0.2, 0.4, 0.6],
-      },
-    );
-
-    nodes.forEach((n) => observer.observe(n));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div
       style={{
@@ -51,6 +21,7 @@ export default function Page() {
         color: ink,
         fontFamily: "inherit",
         margin: 0,
+        overflowX: "hidden",
       }}
     >
       <header
@@ -75,14 +46,14 @@ export default function Page() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 16,
-            background: wash,
+            background: "#ffffff",
             borderRadius: 999,
             padding: "10px 14px 10px 22px",
             minHeight: 52,
           }}
         >
           <a
-            href="#top"
+            href="#thumbnail"
             style={{
               fontSize: 18,
               fontWeight: 700,
@@ -104,57 +75,40 @@ export default function Page() {
             Referral case study
           </span>
           <span
+            className="nav-cta"
             style={{
               fontSize: 13,
               fontWeight: 600,
-              color: board,
+              color: onInk,
               background: ink,
               borderRadius: 999,
               padding: "10px 16px",
               lineHeight: 1,
             }}
           >
-            Concept
+            AI-Prototype
+          </span>
+          <span
+            className="nav-desktop-tag"
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: mute,
+              background: "#ebebef",
+              borderRadius: 999,
+              padding: "8px 12px",
+              lineHeight: 1.2,
+              textAlign: "center",
+            }}
+          >
+            Desktop View Recommended
           </span>
         </nav>
       </header>
 
-      <nav
-        aria-label="Section map"
-        className="scrollspy"
-        style={{
-          position: "fixed",
-          left: 18,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 20,
-          display: "flex",
-          flexDirection: "column",
-          gap: 11,
-        }}
-      >
-        {sections.map((s) => {
-          const active = s.id === activeId;
-          return (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              title={s.label}
-              aria-label={s.label}
-              aria-current={active ? "true" : undefined}
-              style={{
-                width: active ? 34 : 22,
-                height: 4,
-                borderRadius: 999,
-                background: active ? green : barIdle,
-                boxShadow: active ? `0 0 12px ${green}88` : "none",
-                display: "block",
-              }}
-            />
-          );
-        })}
-      </nav>
+      <ScrollSpyNav />
 
+      <ProjectThumbnailSection />
       <div
         style={{
           width: contentWidth,
@@ -162,8 +116,7 @@ export default function Page() {
           padding: "0 0 96px",
         }}
       >
-        <ProjectThumbnailSection />
-        <AboutProductSection />
+        <CaseStudyBody />
       </div>
     </div>
   );
