@@ -51,7 +51,7 @@ export default function PuzzleCompletionScreen({
     const row = cardsRef.current;
     if (!row) return;
 
-    const center = () => {
+    const centerStarter = () => {
       const card = row.querySelector<HTMLElement>("[data-card-center]");
       if (!card) return;
       card.scrollIntoView({
@@ -61,10 +61,165 @@ export default function PuzzleCompletionScreen({
       });
     };
 
-    center();
-    const frame = requestAnimationFrame(center);
-    return () => cancelAnimationFrame(frame);
-  }, []);
+    centerStarter();
+    const frame = requestAnimationFrame(centerStarter);
+
+    const project = (velocity: number, decelerationRate = 0.998) =>
+      ((velocity / 1000) * decelerationRate) / (1 - decelerationRate);
+
+    const snapTargets = () => {
+      const cards = [
+        ...row.querySelectorAll<HTMLElement>(".puzzle-complete__card"),
+      ];
+      return cards.map(
+        (card) => card.offsetLeft + card.offsetWidth / 2 - row.clientWidth / 2,
+      );
+    };
+
+    const nearestTarget = (scroll: number, targets: number[]) => {
+      let best = targets[0] ?? 0;
+      let bestDist = Infinity;
+      for (const target of targets) {
+        const dist = Math.abs(target - scroll);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = target;
+        }
+      }
+      return best;
+    };
+
+    const clampScroll = (value: number) => {
+      const max = Math.max(0, row.scrollWidth - row.clientWidth);
+      return Math.min(max, Math.max(0, value));
+    };
+
+    let pointerId: number | null = null;
+    let startX = 0;
+    let startScroll = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;
+    let dragged = false;
+    let settleRaf = 0;
+
+    const layoutScale = () => {
+      const width = row.offsetWidth;
+      if (!width) return 1;
+      return row.getBoundingClientRect().width / width;
+    };
+
+    const cancelSettle = () => {
+      if (settleRaf) {
+        cancelAnimationFrame(settleRaf);
+        settleRaf = 0;
+      }
+    };
+
+    const settleTo = (target: number) => {
+      cancelSettle();
+      const from = row.scrollLeft;
+      const to = clampScroll(target);
+      if (!animationsOn || Math.abs(to - from) < 0.5) {
+        row.scrollLeft = to;
+        row.classList.remove("puzzle-complete__cards--dragging");
+        return;
+      }
+
+      const start = performance.now();
+      const duration = 320;
+      const distance = to - from;
+
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        // Soft magnet land — same family as --ease-out
+        const eased = 1 - Math.pow(1 - t, 3);
+        row.scrollLeft = from + distance * eased;
+        if (t < 1) {
+          settleRaf = requestAnimationFrame(tick);
+        } else {
+          row.scrollLeft = to;
+          settleRaf = 0;
+          row.classList.remove("puzzle-complete__cards--dragging");
+        }
+      };
+
+      settleRaf = requestAnimationFrame(tick);
+    };
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      cancelSettle();
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      lastX = event.clientX;
+      lastT = performance.now();
+      startScroll = row.scrollLeft;
+      velocity = 0;
+      dragged = false;
+      row.classList.add("puzzle-complete__cards--dragging");
+      row.setPointerCapture(event.pointerId);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (pointerId !== event.pointerId) return;
+      const scale = layoutScale();
+      const delta = (event.clientX - startX) / scale;
+      if (Math.abs(event.clientX - startX) > 4) dragged = true;
+
+      const now = performance.now();
+      const dt = Math.max(1, now - lastT);
+      const instant = ((event.clientX - lastX) / scale / dt) * 1000;
+      // Light smoothing so flick velocity isn't one noisy sample
+      velocity = velocity * 0.7 + instant * 0.3;
+      lastX = event.clientX;
+      lastT = now;
+
+      row.scrollLeft = clampScroll(startScroll - delta);
+    };
+
+    const endPointer = (event: PointerEvent) => {
+      if (pointerId !== event.pointerId) return;
+      pointerId = null;
+      if (row.hasPointerCapture(event.pointerId)) {
+        row.releasePointerCapture(event.pointerId);
+      }
+
+      const targets = snapTargets();
+      if (!targets.length) {
+        row.classList.remove("puzzle-complete__cards--dragging");
+        return;
+      }
+
+      // Project where the flick is going, then magnet to the nearest card
+      const projected = row.scrollLeft - project(velocity);
+      const target = nearestTarget(projected, targets);
+      settleTo(target);
+    };
+
+    const onClickCapture = (event: MouseEvent) => {
+      if (!dragged) return;
+      event.preventDefault();
+      event.stopPropagation();
+      dragged = false;
+    };
+
+    row.addEventListener("pointerdown", onPointerDown);
+    row.addEventListener("pointermove", onPointerMove);
+    row.addEventListener("pointerup", endPointer);
+    row.addEventListener("pointercancel", endPointer);
+    row.addEventListener("click", onClickCapture, true);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      cancelSettle();
+      row.removeEventListener("pointerdown", onPointerDown);
+      row.removeEventListener("pointermove", onPointerMove);
+      row.removeEventListener("pointerup", endPointer);
+      row.removeEventListener("pointercancel", endPointer);
+      row.removeEventListener("click", onClickCapture, true);
+    };
+  }, [animationsOn]);
 
   useEffect(() => {
     if (!animationsOn) {

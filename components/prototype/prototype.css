@@ -2282,10 +2282,22 @@
   display: flex;
   gap: 24px;
   overflow-x: auto;
-  padding: 0;
+  overflow-y: hidden;
+  padding: 0 calc((100% - 200px) / 2);
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: calc((100% - 200px) / 2);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: none;
+  cursor: grab;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.puzzle-complete__cards--dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  scroll-behavior: auto;
 }
 
 .puzzle-complete__cards::-webkit-scrollbar {
