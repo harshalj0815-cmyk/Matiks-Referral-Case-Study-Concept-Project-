@@ -7,6 +7,8 @@ import {
   problemSection,
   stackSections,
 } from "@/content/case";
+import { IterationsBoard } from "@/components/IterationsBoard";
+import { EmbeddedPrototype } from "@/components/EmbeddedPrototype";
 
 const green = "#16c45a";
 const ink = "#282828";
@@ -279,26 +281,39 @@ function VisualSlot({
   src?: string;
   alt?: string;
 }) {
+  const [failed, setFailed] = useState(false);
+  const showImage = Boolean(src) && !failed;
+  // Bust sticky 404s in previews after a new public asset is dropped in.
+  const resolvedSrc = src
+    ? `${src}${src.includes("?") ? "&" : "?"}v=7`
+    : undefined;
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
+
   return (
     <div
       style={{
-        background: src ? "transparent" : wash,
+        background: showImage ? "transparent" : wash,
         borderRadius: mediaRadius,
-        minHeight: fill ? 0 : src ? undefined : minHeight,
+        minHeight: fill ? 0 : minHeight,
         flex: fill ? 1 : undefined,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: src ? 0 : 32,
+        padding: showImage ? 0 : 32,
         width: "100%",
         overflow: "hidden",
       }}
     >
-      {src ? (
+      {showImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={src}
+          key={resolvedSrc}
+          src={resolvedSrc}
           alt={alt || caption}
+          onError={() => setFailed(true)}
           style={{
             display: "block",
             width: "100%",
@@ -339,23 +354,54 @@ function LinkRow({
         marginBottom: 16,
       }}
     >
-      {links.map((link) => (
-        <a
-          key={link.label}
-          href={link.href}
-          style={{
-            fontSize: 15,
-            fontWeight: 600,
-            color: ink,
-            background: "#DFFBBF",
-            borderRadius: 999,
-            padding: "10px 16px",
-            textDecoration: "none",
-          }}
-        >
-          {link.label}
-        </a>
-      ))}
+      {links.map((link) => {
+        const external = link.href.startsWith("http");
+        return (
+          <a
+            key={link.label}
+            href={link.href}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              gap: 20,
+              boxSizing: "border-box",
+              width: 148,
+              minHeight: 96,
+              padding: "16px 16px 14px",
+              borderRadius: 20,
+              background: "#ffffff",
+              color: ink,
+              textDecoration: "none",
+              border: "1px solid rgba(40, 40, 40, 0.08)",
+              transition: "border-color 160ms ease, transform 160ms ease",
+            }}
+          >
+            <span
+              style={{
+                fontSize: 16,
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.2,
+              }}
+            >
+              {link.label}
+            </span>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 500,
+                color: mute,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Open ↗
+            </span>
+          </a>
+        );
+      })}
     </div>
   );
 }
@@ -427,8 +473,27 @@ function OpenStackPart({
         )}
       </ExpandableBlock>
       {part.links?.length ? <LinkRow links={part.links} /> : null}
-      {showVisual ? (
-        <VisualSlot caption={part.visualCaption} />
+      {showVisual &&
+      (part.id === "design-iterations" ||
+        part.id === "final-feature-design" ||
+        part.visualSrc ||
+        part.visualCaption) ? (
+        part.id === "design-iterations" ? (
+          <div style={{ width: "100%", marginTop: 0 }}>
+            <IterationsBoard className="iterations-board-landing" />
+          </div>
+        ) : part.id === "final-feature-design" ? (
+          <div style={{ width: "100%", marginTop: 0 }}>
+            <EmbeddedPrototype />
+          </div>
+        ) : (
+          <VisualSlot
+            caption={part.visualCaption}
+            src={part.visualSrc}
+            alt={part.visualAlt}
+            minHeight={part.visualMinHeight ?? 420}
+          />
+        )
       ) : null}
     </div>
   );
@@ -474,14 +539,14 @@ export function ProblemSection({ number }: { number: number }) {
       <ExpandableBlock>
         <Description
           parts={problemSection.descriptionParts}
-          marginBottom={10}
-        />
-        <Description
-          parts={problemSection.implicationParts}
           marginBottom={0}
         />
       </ExpandableBlock>
-      <VisualSlot caption={problemSection.visualCaption} />
+      <VisualSlot
+        caption={problemSection.visualCaption}
+        src={problemSection.visualSrc}
+        alt={problemSection.visualAlt}
+      />
 
       <div style={{ height: 80 }} />
       <div id={problemSection.solves.id} style={{ scrollMarginTop: 96 }}>
@@ -492,7 +557,11 @@ export function ProblemSection({ number }: { number: number }) {
             marginBottom={0}
           />
         </ExpandableBlock>
-        <VisualSlot caption={problemSection.solves.visualCaption} />
+        <VisualSlot
+          caption={problemSection.solves.visualCaption}
+          src={problemSection.solves.visualSrc}
+          alt={problemSection.solves.visualAlt}
+        />
       </div>
     </section>
   );

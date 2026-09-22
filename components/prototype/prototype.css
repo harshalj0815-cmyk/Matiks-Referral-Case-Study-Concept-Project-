@@ -27,6 +27,7 @@
   --proto-btn-rise: 4px;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --case-ink: #282828;
   --case-mute: #555555;
@@ -44,6 +45,23 @@
   overflow: hidden;
   background: var(--case-board);
   font-family: var(--font-montserrat), "Montserrat", sans-serif;
+}
+
+/* Nested in the case landing — not a full-viewport route */
+.prototype-canvas--embed {
+  --embed-h: auto;
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  width: 100%;
+  border-radius: clamp(16px, 4.5vw, 48px);
+  padding: 28px 20px 32px;
+  overflow: visible;
+}
+
+.prototype-canvas--embed .prototype-flow .iphone-scale {
+  /* Fit to a comfortable case-study phone size; never force container scroll */
+  --fit-scale: min(0.78, calc((100dvw - 80px) / (var(--phone-w) + 560px)));
 }
 
 .prototype-flow {
@@ -75,9 +93,11 @@
 .prototype-flow__controls {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
   width: min(520px, 44vw);
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
   font-family: var(--font-figtree), "Figtree", sans-serif;
 }
 
@@ -104,10 +124,10 @@
   justify-content: space-between;
   gap: 10px;
   height: 36px;
-  padding: 0 10px 0 12px;
-  border: 1px solid rgba(40, 40, 40, 0.08);
-  border-radius: 12px;
-  background: var(--case-wash);
+  padding: 0 10px 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: #f0f0f2;
   color: var(--case-mute);
   font: inherit;
   font-size: 13px;
@@ -116,8 +136,7 @@
   cursor: pointer;
   transition:
     background 160ms ease,
-    color 160ms ease,
-    border-color 160ms ease;
+    color 160ms ease;
 }
 
 .prototype-flow__toggle-copy {
@@ -137,7 +156,7 @@
   width: 34px;
   height: 20px;
   border-radius: 999px;
-  background: #d0d0d0;
+  background: #c8c8c8;
   transition: background 160ms ease;
 }
 
@@ -148,15 +167,13 @@
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  background: #ffffff;
   transition: transform 160ms ease;
 }
 
 .prototype-flow__toggle--on {
-  color: #1e1e1e;
-  border-color: rgba(40, 40, 40, 0.12);
-  background: #ececec;
+  color: var(--case-ink);
+  background: #f0f0f2;
 }
 
 .prototype-flow__toggle--on .prototype-flow__switch {
@@ -168,7 +185,7 @@
 }
 
 .prototype-flow__toggle:focus-visible {
-  outline: 2px solid var(--case-ink);
+  outline: 2px solid #16c45a;
   outline-offset: 2px;
 }
 
@@ -186,10 +203,15 @@
   background: var(--case-ink);
   color: var(--case-on-ink);
   cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.prototype-flow__reload:hover {
+  color: #16c45a;
 }
 
 .prototype-flow__reload:focus-visible {
-  outline: 2px solid var(--case-ink);
+  outline: 2px solid #16c45a;
   outline-offset: 2px;
 }
 
@@ -211,25 +233,42 @@
   opacity: 1;
 }
 
+/* Case-study chrome — wash groups, no bordered cards */
 .case-seg {
   display: flex;
   flex-direction: column;
   gap: 10px;
   box-sizing: border-box;
-  background: #ffffff;
-  border: 1px solid rgba(40, 40, 40, 0.08);
-  border-radius: 22px;
+  background: var(--case-wash);
+  border: none;
+  border-radius: 28px;
   padding: 14px 14px 12px;
-  box-shadow: 0 1px 2px rgba(40, 40, 40, 0.04);
+  box-shadow: none;
+}
+
+/* Tools row — white so Soft #f0f0f2 toggles match the iterations Rotate control */
+.case-seg--tools {
+  background: #ffffff;
+}
+
+.prototype-flow__tools-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prototype-flow__tools-block > .case-seg__label {
+  margin: 0;
+  padding: 0 4px;
 }
 
 .case-seg__label {
   margin: 0;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: var(--case-mute);
+  color: #16c45a;
 }
 
 .case-seg__track {
@@ -240,16 +279,16 @@
   gap: 2px;
   box-sizing: border-box;
   width: 100%;
-  background: var(--case-wash);
+  background: #ffffff;
   border-radius: 999px;
   padding: 5px;
 }
 
 .case-seg__note {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 1.35;
+  line-height: 1.45;
   color: var(--case-mute);
 }
 
@@ -287,41 +326,133 @@
 }
 
 .case-seg__option:focus-visible {
-  outline: 2px solid var(--case-ink);
+  outline: 2px solid #16c45a;
   outline-offset: 2px;
 }
 
 .case-seg--disabled {
+  position: relative;
   opacity: 0.48;
+  cursor: help;
 }
 
 .case-seg--disabled .case-seg__option {
   cursor: not-allowed;
 }
 
+.case-seg__disabled-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 5;
+  width: max-content;
+  max-width: min(280px, calc(100% + 24px));
+  transform: translateX(-50%) translateY(4px);
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--case-ink);
+  color: var(--case-on-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(17, 17, 19, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 140ms ease;
+}
+
+.case-seg--disabled:hover .case-seg__disabled-hint,
+.case-seg--disabled:focus-within .case-seg__disabled-hint {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 280ms;
+}
+
 .iphone-scale {
   --phone-w: 402px;
   --phone-h: 874px;
-  --fit-scale: min(
-    1,
-    calc((100dvh - 32px) / var(--phone-h)),
-    calc((100dvw - 32px) / var(--phone-w))
+  /* Height-fit only — keep the phone at design scale whenever the viewport allows */
+  --fit-scale: min(1, calc((100dvh - 32px) / var(--phone-h)));
+  /* Room for Action / volume / power buttons past the chassis */
+  --btn-overhang: 8px;
+  width: calc(
+    (var(--phone-w) + 2 * var(--btn-overhang)) * var(--fit-scale)
   );
-  width: calc(var(--phone-w) * var(--fit-scale));
   height: calc(var(--phone-h) * var(--fit-scale));
   position: relative;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .prototype-flow .iphone-scale {
-  --fit-scale: min(
-    1,
-    calc((100dvh - 32px) / var(--phone-h)),
-    calc((100dvw - 580px) / var(--phone-w))
-  );
+  --fit-scale: min(1, calc((100dvh - 32px) / var(--phone-h)));
 }
 
-@media (max-width: 860px) {
+.prototype-desktop-gate {
+  display: none;
+  box-sizing: border-box;
+  width: min(360px, 100%);
+  padding: 8px 4px;
+  text-align: center;
+  font-family: var(--font-figtree), "Figtree", var(--font-montserrat), sans-serif;
+}
+
+.prototype-desktop-gate__eyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #16c45a;
+}
+
+.prototype-desktop-gate__title {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--case-ink);
+}
+
+.prototype-desktop-gate__body {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--case-mute);
+}
+
+.prototype-desktop-gate__content {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Phones only — Cursor / narrow desktop panes stay interactive */
+@media (max-width: 640px) {
+  .prototype-canvas {
+    padding: 24px 20px;
+    overflow: hidden;
+  }
+
+  .prototype-desktop-gate {
+    display: block;
+  }
+
+  .prototype-desktop-gate__content {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 980px) {
   .prototype-canvas {
     overflow: auto;
     place-items: start center;
@@ -338,12 +469,22 @@
     width: min(520px, 100%);
   }
 
-  .iphone-scale {
+  .prototype-flow .iphone-scale {
     --fit-scale: min(
       1,
-      calc((100dvh - 220px) / var(--phone-h)),
+      calc((100dvh - 240px) / var(--phone-h)),
       calc((100dvw - 32px) / var(--phone-w))
     );
+  }
+
+  .prototype-canvas--embed {
+    overflow: visible;
+    height: auto;
+    max-height: none;
+  }
+
+  .prototype-canvas--embed .prototype-flow .iphone-scale {
+    --fit-scale: min(0.78, calc((100dvw - 48px) / var(--phone-w)));
   }
 }
 
@@ -352,17 +493,76 @@
   height: var(--phone-h);
   position: absolute;
   top: 0;
-  left: 0;
+  left: calc(var(--btn-overhang) * var(--fit-scale));
+  /* transform keeps hit-testing predictable; zoom was covering the controls */
   transform: scale(var(--fit-scale));
   transform-origin: top left;
   border-radius: 54px;
   padding: 12px;
   box-sizing: border-box;
-  background: linear-gradient(160deg, #2a2a2c 0%, #0c0c0d 45%, #1a1a1c 100%);
+  background: #111113;
+  /* Hairline only — no soft drop shadow pooling at the corners */
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.iphone-frame__btn {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #4a4a50 0%,
+    #2c2c30 35%,
+    #1a1a1c 70%,
+    #3a3a40 100%
+  );
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 28px 60px rgba(0, 0, 0, 0.35),
-    0 8px 20px rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    0 0 0 0.5px rgba(0, 0, 0, 0.35);
+}
+
+/* Left: Action (mute) — short, above the volume stack */
+.iphone-frame__btn--action {
+  left: -5px;
+  top: 148px;
+  width: 5px;
+  height: 34px;
+  border-radius: 2px 1px 1px 2px;
+}
+
+/* Left: Volume up */
+.iphone-frame__btn--vol-up {
+  left: -5px;
+  top: 210px;
+  width: 5px;
+  height: 56px;
+  border-radius: 2px 1px 1px 2px;
+}
+
+/* Left: Volume down */
+.iphone-frame__btn--vol-down {
+  left: -5px;
+  top: 278px;
+  width: 5px;
+  height: 56px;
+  border-radius: 2px 1px 1px 2px;
+}
+
+/* Right: Side / power button */
+.iphone-frame__btn--power {
+  right: -5px;
+  top: 230px;
+  width: 5px;
+  height: 92px;
+  border-radius: 1px 2px 2px 1px;
+  background: linear-gradient(
+    270deg,
+    #4a4a50 0%,
+    #2c2c30 35%,
+    #1a1a1c 70%,
+    #3a3a40 100%
+  );
 }
 
 .iphone-frame__screen {
@@ -452,18 +652,16 @@
   left: 50%;
   top: 42%;
   z-index: 0;
-  width: 280%;
+  /* Larger crop so the asset’s black corner vignette stays off-screen */
+  width: 380%;
   aspect-ratio: 1 / 1;
   height: auto;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.96);
   transform-origin: center center;
   pointer-events: none;
-  will-change: transform, opacity;
   opacity: 0;
-  /* Entrance finishes ~480ms; flair reveals slower after that */
-  animation:
-    mk-flair-fade-in 720ms var(--ease-out) 560ms forwards,
-    duel-flair-spin 28s linear 560ms infinite;
+  /* Soft land with the card; spin lives on the image so transforms don't fight */
+  animation: mk-flair-enter 400ms var(--ease-out) 120ms forwards;
 }
 
 .duel-victory__flair {
@@ -472,24 +670,42 @@
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  opacity: 0.85;
-  will-change: opacity;
-  animation: duel-flair-breathe 3.2s ease-in-out 1280ms infinite;
+  opacity: 1;
+  /* Drop the asset’s black vignette so phone corners stay clean */
+  mix-blend-mode: screen;
+  transform-origin: center center;
+  animation:
+    duel-flair-spin 48s linear 520ms infinite,
+    duel-flair-breathe 3.2s var(--ease-in-out) 520ms infinite;
 }
 
 @keyframes duel-flair-spin {
+  from {
+    transform: rotate(0deg);
+  }
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes duel-flair-breathe {
   0%,
   100% {
-    opacity: 0.7;
+    opacity: 0.88;
   }
   50% {
-    opacity: 0.95;
+    opacity: 1;
+  }
+}
+
+@keyframes mk-flair-enter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -502,9 +718,21 @@
   }
 }
 
+.prototype-flow--static .duel-victory__flair-spin,
+.prototype-flow--static .puzzle-complete__flair-spin {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.prototype-flow--static .duel-victory__flair,
+.prototype-flow--static .puzzle-complete__flair {
+  opacity: 0.85;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .duel-victory__flair-spin {
-    animation: mk-flair-fade-in 220ms ease 280ms forwards;
+    animation: mk-flair-fade-in 220ms ease 120ms forwards;
+    transform: translate(-50%, -50%);
   }
 
   .duel-victory__flair {
@@ -515,7 +743,6 @@
   .duel-victory__top,
   .duel-victory__mascot,
   .duel-victory__card,
-  .duel-victory__score--win,
   .duel-victory__actions,
   .duel-victory__feedback {
     animation: mk-screen-fade 180ms ease both;
@@ -668,8 +895,6 @@
 
 .duel-victory__score--win {
   color: var(--proto-lime);
-  animation: mk-score-pop 260ms var(--ease-out) both;
-  animation-delay: 180ms;
 }
 
 .duel-victory__score--lose {
@@ -891,7 +1116,8 @@
   -webkit-backdrop-filter: blur(2px);
   opacity: 0;
   cursor: pointer;
-  transition: opacity 0.28s ease;
+  /* Dismiss: snappy fade so it doesn't linger with the sheet */
+  transition: opacity 280ms var(--ease-out);
 }
 
 .close-game__top {
@@ -905,7 +1131,7 @@
   justify-content: flex-end;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.28s ease;
+  transition: opacity 280ms var(--ease-out);
 }
 
 .close-game__top .mk-chip {
@@ -915,10 +1141,13 @@
 .close-game--open .close-game__overlay,
 .close-game--open .close-game__top {
   opacity: 1;
+  transition: opacity 500ms var(--ease-out);
 }
 
 .close-game--invite.close-game--open .close-game__sheet {
   transform: translateY(0);
+  /* Rise: drawer curve */
+  transition: transform 500ms var(--ease-drawer);
 }
 
 /* Shared invite sheet — same format/size as Puzzle Completion */
@@ -931,13 +1160,11 @@
   box-sizing: border-box;
   padding: 0 24px calc(40px + env(safe-area-inset-bottom, 0px));
   border-radius: 16px 16px 0 0;
-  background: radial-gradient(
-    61.52% 115.43% at 50% 38.48%,
-    #2c2c2c 0%,
-    #1e1e1e 72%
-  );
-  transform: translateY(110%);
-  transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Flat fill — no radial vignette darkening the corners */
+  background: #1e1e1e;
+  transform: translateY(100%);
+  /* Slide down: even finish — drawer ease crawls at the end */
+  transition: transform 280ms var(--ease-in-out);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1088,19 +1315,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .close-game__overlay,
-  .close-game__top,
-  .close-game__sheet {
-    transition: none;
+  .close-game--invite .close-game__sheet {
+    transform: none;
+    opacity: 0;
+    transition: opacity 200ms ease;
   }
 
-  .close-game--invite .close-game__sheet {
-    transform: translateY(0);
+  .close-game--invite.close-game--open .close-game__sheet {
+    opacity: 1;
   }
 
   .close-game__overlay,
   .close-game__top {
-    opacity: 1;
+    transition: opacity 200ms ease;
   }
 }
 
@@ -1123,22 +1350,91 @@
   appearance: none;
   display: inline-flex;
   width: auto;
-  padding: 0;
-  /* Reserve shelf height so press translateY doesn't shove the card */
+  /* Even rim on top/left/right/bottom — shelf is box-shadow only */
+  padding: var(--proto-btn-border);
+  /* Layout reserve so press translateY never reflows the sheet/card */
   margin: 0 0 var(--proto-btn-rise);
   border: none;
   border-radius: var(--proto-radius-button);
-  /* Same as shelf so scaled phones don't show a hairline of the dark sheet */
   background: var(--mk-btn-shelf);
-  /* Offset+spread overlap the face bottom so the dark sheet can't bleed through */
-  box-shadow: 0 calc(var(--proto-btn-rise) - 1px) 0 1px var(--mk-btn-shelf);
+  /* Shelf below only — no side spread */
+  box-shadow: 0 var(--proto-btn-rise) 0 0 var(--mk-btn-shelf);
   cursor: default;
   font-family: inherit;
   vertical-align: top;
+  box-sizing: border-box;
 }
 
 .mk-btn--full {
   width: 100%;
+}
+
+.mk-morph {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  gap: inherit;
+  perspective: 140px;
+  transform-style: preserve-3d;
+}
+
+.mk-morph--static {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  perspective: none;
+  transform-style: flat;
+}
+
+.mk-morph__layer {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  backface-visibility: hidden;
+  transform: rotateX(0deg);
+  opacity: 1;
+  transition:
+    transform 200ms var(--ease-in-out),
+    opacity 200ms var(--ease-in-out);
+}
+
+.mk-morph__layer--leave {
+  transform: rotateX(-90deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mk-morph__layer--enter {
+  transform: rotateX(90deg);
+  opacity: 0;
+}
+
+.mk-morph__layer--enter.mk-morph__layer--show,
+.mk-morph__layer--show {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-morph__layer {
+    transform: none;
+    transition: opacity 160ms ease;
+  }
+
+  .mk-morph__layer--leave,
+  .mk-morph__layer--enter {
+    transform: none;
+    opacity: 0;
+  }
+
+  .mk-morph__layer--show {
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .mk-btn__face {
@@ -1148,11 +1444,13 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  height: 45px;
+  /* Outer size stays 45px: face + even rim padding */
+  height: calc(45px - 2 * var(--proto-btn-border));
   box-sizing: border-box;
   padding: 0 24px;
-  border-radius: var(--proto-radius-button);
-  border: var(--proto-btn-border) solid var(--proto-lime-deep);
+  /* Inset radius so the rim reads even on the curves */
+  border-radius: calc(var(--proto-radius-button) - var(--proto-btn-border));
+  border: none;
   background: var(--proto-lime);
   color: #000;
   overflow: hidden;
@@ -1199,7 +1497,6 @@
 
 .mk-btn--secondary .mk-btn__face {
   background: var(--proto-page);
-  border-color: var(--proto-plate);
   color: #fff;
 }
 
@@ -1211,7 +1508,6 @@
 .mk-btn--secondary:disabled .mk-btn__face,
 .mk-btn--secondary.mk-btn--disabled .mk-btn__face {
   background: var(--proto-page);
-  border-color: var(--proto-plate);
   color: #fff;
   opacity: 0.55;
 }
@@ -1232,7 +1528,6 @@
 .mk-btn--disabled .mk-btn__face,
 .mk-btn:disabled .mk-btn__face {
   background: var(--proto-page);
-  border-color: var(--proto-plate);
   color: var(--proto-plate);
 }
 
@@ -1241,7 +1536,7 @@
   font-weight: 500;
 }
 
-/* 3D press: sink via transform only — keep margin so the sheet layout never shifts */
+/* 3D press: transform + drop shelf only — padding stays put so the card doesn't jump */
 .mk-btn:not(:disabled):not(.mk-btn--disabled) {
   cursor: pointer;
   transition:
@@ -1324,16 +1619,18 @@
 }
 
 .mk-chip {
+  --mk-chip-rise: var(--proto-btn-rise);
   --mk-chip-shelf: var(--proto-plate);
   appearance: none;
   display: inline-flex;
   padding: 0;
-  /* Reserve shelf height; paint shelf with shadow so scale can't skew the face */
-  margin: 0 0 var(--proto-btn-rise);
+  /* Reserve shelf height so press translateY doesn't shove the row */
+  margin: 0 0 var(--mk-chip-rise);
   border: none;
   border-radius: var(--proto-radius-chip);
   background: var(--mk-chip-shelf);
-  box-shadow: 0 calc(var(--proto-btn-rise) - 1px) 0 1px var(--mk-chip-shelf);
+  /* Same shelf treatment as .mk-btn — shelf only below, even side borders */
+  box-shadow: 0 var(--mk-chip-rise) 0 0 var(--mk-chip-shelf);
   cursor: pointer;
   font-family: inherit;
   flex-shrink: 0;
@@ -1348,8 +1645,15 @@
   pointer-events: none;
 }
 
-.mk-chip:not(:disabled):active {
-  transform: translateY(var(--proto-btn-rise));
+/*
+  Momentary click + latched Sent — sink into the shelf and stay there.
+  .mk-chip--pressing covers the morph frame where :active would already be gone.
+*/
+.mk-chip:not(:disabled):active,
+.mk-chip--pressing,
+.mk-chip[aria-pressed="true"],
+.mk-chip--pressed {
+  transform: translateY(var(--mk-chip-rise));
   box-shadow: none;
 }
 
@@ -1368,6 +1672,18 @@
   border: var(--proto-btn-border) solid var(--proto-plate);
   background: var(--proto-surface);
   color: #fff;
+  overflow: hidden;
+  transition:
+    background-color 90ms ease,
+    box-shadow 90ms ease;
+}
+
+.mk-chip:not(:disabled):active .mk-chip__face,
+.mk-chip--pressing .mk-chip__face,
+.mk-chip[aria-pressed="true"] .mk-chip__face,
+.mk-chip--pressed .mk-chip__face {
+  background: #181818;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.55);
 }
 
 .mk-chip__label {
@@ -1465,6 +1781,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
 }
 
 .mk-game-card__badge {
@@ -1568,9 +1887,12 @@
   width: 10px;
   height: 17px;
   flex-shrink: 0;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 .mk-toast {
+  position: relative;
   width: 100%;
   max-width: 354px;
   box-sizing: border-box;
@@ -1579,6 +1901,27 @@
   border: 1px solid var(--proto-border);
   background: var(--proto-surface);
   color: var(--proto-text);
+  opacity: 0;
+  transform: translateY(-100%) scale(0.97);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+  overflow: hidden;
+}
+
+.mk-toast--entered {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.mk-toast--exiting {
+  opacity: 0;
+  transform: translateY(-100%) scale(0.97);
+  pointer-events: none;
+}
+
+.mk-toast--exiting .mk-toast__timer {
+  opacity: 0;
 }
 
 .mk-toast--friend {
@@ -1596,6 +1939,11 @@
   width: 100%;
 }
 
+.mk-toast--clickable.mk-toast--entered:active {
+  transform: scale(0.97);
+  transition-duration: 160ms;
+}
+
 /* Paper Toast2 — 354×64, fill #1e1e1e, 12px pad around 40px Retry chip */
 .mk-toast--failed,
 .mk-toast--wifi {
@@ -1604,6 +1952,46 @@
   padding: 12px;
   border-radius: 16px;
   background: var(--proto-card-end);
+}
+
+.mk-toast__timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0 0 16px 16px;
+  background: transparent;
+}
+
+.mk-toast__timer-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--proto-lime);
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.mk-toast__timer--run .mk-toast__timer-bar {
+  animation: mk-toast-timer 5s linear forwards;
+}
+
+@keyframes mk-toast-timer {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-toast__timer--run .mk-toast__timer-bar {
+    animation-duration: 5s;
+  }
 }
 
 .mk-toast__row {
@@ -1710,7 +2098,17 @@
     rgba(0, 0, 0, 0.7) 42%,
     rgba(0, 0, 0, 0) 100%
   );
-  animation: mk-toast-slide-down 240ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.duel-victory__toast:has(.mk-toast--entered),
+.close-game__toast:has(.mk-toast--entered),
+.track-referral__toast:has(.mk-toast--entered),
+.duel-victory__toast:has(.mk-toast--exiting),
+.close-game__toast:has(.mk-toast--exiting),
+.track-referral__toast:has(.mk-toast--exiting) {
+  opacity: 1;
 }
 
 .duel-victory__toast .mk-toast,
@@ -1726,14 +2124,25 @@
   padding-top: 64px;
 }
 
-@keyframes mk-toast-slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+@media (prefers-reduced-motion: reduce) {
+  .mk-toast {
+    transform: none;
+    transition: opacity 200ms ease;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .mk-toast--entered,
+  .mk-toast--exiting {
+    transform: none;
+  }
+
+  .mk-toast--clickable.mk-toast--entered:active {
+    transform: none;
+  }
+
+  .duel-victory__toast,
+  .close-game__toast,
+  .track-referral__toast {
+    transition: opacity 200ms ease;
   }
 }
 
@@ -1777,23 +2186,6 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .duel-victory__toast,
-  .close-game__toast,
-  .track-referral__toast {
-    animation: mk-toast-fade-in 180ms ease both;
-  }
-
-  @keyframes mk-toast-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
   }
 }
 
@@ -1857,15 +2249,18 @@
   white-space: nowrap;
 }
 
-/* Keep Add chip face centered with the avatar; shelf sits below the row */
+/* Keep Add/Sent chip face aligned with the avatar; shelf sits in the reserved margin */
 .mk-referral__header .mk-chip {
+  /* Match Sent’s natural width so Add doesn’t jump narrower */
+  min-width: 74px;
   margin-top: 0;
-  margin-bottom: 0;
-  align-self: center;
+  margin-bottom: var(--mk-chip-rise, var(--proto-btn-rise));
+  align-self: flex-start;
 }
 
-.mk-referral__header .mk-chip:not(:disabled):active {
-  transform: none;
+.mk-referral__header .mk-chip__face {
+  width: 100%;
+  justify-content: center;
 }
 
 .mk-referral__progress {
@@ -2018,14 +2413,11 @@
   width: 240%;
   aspect-ratio: 1 / 1;
   height: auto;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.96);
   transform-origin: center center;
   pointer-events: none;
-  will-change: transform, opacity;
   opacity: 0;
-  animation:
-    mk-flair-fade-in 720ms var(--ease-out) 560ms forwards,
-    duel-flair-spin 28s linear 560ms infinite;
+  animation: mk-flair-enter 400ms var(--ease-out) 120ms forwards;
 }
 
 .puzzle-complete__flair {
@@ -2035,8 +2427,10 @@
   object-fit: cover;
   object-position: center center;
   opacity: 0.42;
-  will-change: opacity;
-  animation: puzzle-flair-breathe 3.2s ease-in-out 1280ms infinite;
+  transform-origin: center center;
+  animation:
+    duel-flair-spin 48s linear 520ms infinite,
+    puzzle-flair-breathe 3.2s var(--ease-in-out) 520ms infinite;
 }
 
 @keyframes puzzle-flair-breathe {
@@ -2051,7 +2445,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .puzzle-complete__flair-spin {
-    animation: mk-flair-fade-in 220ms ease 280ms forwards;
+    animation: mk-flair-fade-in 220ms ease 120ms forwards;
+    transform: translate(-50%, -50%);
   }
 
   .puzzle-complete__flair {
@@ -2292,6 +2687,8 @@
   cursor: grab;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .puzzle-complete__cards--dragging {
@@ -2309,6 +2706,8 @@
   flex-shrink: 0;
   padding: 12px;
   scroll-snap-align: center;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .puzzle-complete__card .mk-game-card__title {
@@ -2463,11 +2862,8 @@
   align-items: center;
   border-radius: 16px 16px 0 0;
   border-top: 0.8px solid var(--proto-border-soft);
-  background: radial-gradient(
-    61.52% 115.43% at 50% 38.48%,
-    #2c2c2c 0%,
-    #1e1e1e 72%
-  );
+  /* Flat fill — no radial vignette darkening the corners */
+  background: #1e1e1e;
   padding: 0 38px 21px;
   overflow: visible;
 }
@@ -2683,6 +3079,7 @@
 .loom-slide__home-btn {
   position: absolute;
   inset: 0;
+  z-index: 0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -2700,6 +3097,31 @@
   max-height: 100%;
   object-fit: contain;
   object-position: center bottom;
+}
+
+.loom-slide__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--proto-page);
+  opacity: 1;
+  transition: opacity 500ms var(--ease-out);
+}
+
+.loom-slide__scrim--clear {
+  opacity: 0;
+}
+
+.prototype-flow--static .loom-slide__scrim {
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loom-slide__scrim {
+    transition: opacity 200ms ease;
+  }
 }
 
 

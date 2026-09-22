@@ -12,6 +12,10 @@ export default function IPhoneFrame({
   return (
     <div className="iphone-scale">
       <div className="iphone-frame" aria-label="iPhone 16 Pro frame">
+        <span className="iphone-frame__btn iphone-frame__btn--action" aria-hidden />
+        <span className="iphone-frame__btn iphone-frame__btn--vol-up" aria-hidden />
+        <span className="iphone-frame__btn iphone-frame__btn--vol-down" aria-hidden />
+        <span className="iphone-frame__btn iphone-frame__btn--power" aria-hidden />
         <div className="iphone-frame__screen">
           <div className="iphone-frame__island" aria-hidden />
           <div className="iphone-frame__status">

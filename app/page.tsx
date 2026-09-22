@@ -9,7 +9,6 @@ import { ScrollSpyNav } from "@/components/ScrollSpyNav";
 const ink = "#282828";
 const mute = "#555555";
 const board = "#f5f5f7";
-const onInk = "#ffffff";
 const contentWidth = "min(920px, calc(100% - 40px))";
 
 export default function Page() {
@@ -74,20 +73,22 @@ export default function Page() {
           >
             Referral case study
           </span>
-          <span
+          <a
+            href="#ai-prototype"
             className="nav-cta"
             style={{
               fontSize: 13,
               fontWeight: 600,
-              color: onInk,
               background: ink,
               borderRadius: 999,
               padding: "10px 16px",
               lineHeight: 1,
+              textDecoration: "none",
+              transition: "color 0.2s ease",
             }}
           >
             AI-Prototype
-          </span>
+          </a>
           <span
             className="nav-desktop-tag"
             style={{

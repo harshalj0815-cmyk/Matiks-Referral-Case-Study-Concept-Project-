@@ -38,6 +38,19 @@ html.page-scrolled .site-header {
   display: none;
 }
 
+.nav-cta {
+  color: #ffffff;
+}
+
+.nav-cta:hover {
+  color: #16c45a;
+}
+
+.nav-cta:focus-visible {
+  outline: 2px solid #16c45a;
+  outline-offset: 2px;
+}
+
 @media (max-width: 640px) {
   .nav-mid {
     display: none;

@@ -12,6 +12,10 @@ export type StackPart = {
   moreParagraphs?: TextPart[][];
   asBullets?: boolean;
   visualCaption: string;
+  visualSrc?: string;
+  visualAlt?: string;
+  /** Min height for tall stacked visuals (width stays board width). */
+  visualMinHeight?: number;
   links?: { label: string; href: string }[];
 };
 
@@ -67,7 +71,10 @@ export const featureContext: StackSection = {
           text: ", while that feeling is still fresh.",
         },
       ],
-      visualCaption: "Situation-based slide-up in play. Visual not in yet.",
+      visualCaption: "Joy moment → refer ask → invite sent.",
+      visualSrc: "/case/what-is-feature.png",
+      visualAlt:
+        "What is the feature: joy moment, refer slide-up with reward, then share invite with a friend",
     },
     {
       id: "context",
@@ -89,7 +96,10 @@ export const featureContext: StackSection = {
         },
         { text: "." },
       ],
-      visualCaption: "Excite moments in daily play. Visual not in yet.",
+      visualCaption: "Excite moments in daily play — close win, personal best, streak.",
+      visualSrc: "/case/where-it-sits.png",
+      visualAlt:
+        "Where it sits: referral slide-ups in daily play for close win, personal best, and streak",
     },
   ],
 };
@@ -113,12 +123,10 @@ export const problemSection = {
     { text: "introduced it as a math game", highlight: true },
     { text: ", so interest dies before giving a try." },
   ] as TextPart[],
-  implicationParts: [
-    {
-      text: "The path from \"I want my friend to try Matiks\" to \"my friend actually tries it\" has to get shorter and clearer. That path cannot depend on a spoken math pitch or the friend doing the homework alone.",
-    },
-  ] as TextPart[],
-  visualCaption: "Research quotes / problem evidence. Visual not in yet.",
+  visualCaption: "Interview quotes on talk-only share, late discovery, math pitch, and Play Store.",
+  visualSrc: "/case/problem.png",
+  visualAlt:
+    "Problem evidence: six interview sticky notes on Play Store share, late discovery, math pitch, unused referrals, settings find, and Hindi Play Store note",
   solves: {
     id: "how-redesign-solves-it",
     partTitle: "How redesign solves it",
@@ -135,7 +143,10 @@ export const problemSection = {
       { text: "acquisition loop continues", highlight: true },
       { text: "." },
     ] as TextPart[],
-    visualCaption: "From excite moment to tracked invite. Visual not in yet.",
+    visualCaption: "Peak moments — thrill, pride, sense of achievement — and the refer ask.",
+    visualSrc: "/case/how-it-works.png",
+    visualAlt:
+      "How redesign solves it: three referral slide-ups for close win, personal best, and streak milestone",
   },
 };
 
@@ -168,7 +179,10 @@ export const researchSection: StackSection = {
           text: " in normal play, so discoverability stayed as an in-the-moment issue. I demoted the stronger claim that nobody knows the feature exists.",
         },
       ],
-      visualCaption: "Affinity clusters and interview notes. Visual not in yet.",
+      visualCaption: "Affinity clusters from interview notes — keep, demote, eliminate.",
+      visualSrc: "/case/qualitative.png",
+      visualAlt:
+        "Qualitative research: affinity cluster cards from interview notes showing keep, demote, and eliminate themes",
     },
     {
       id: "quantitative",
@@ -266,7 +280,7 @@ export const ideationSection: StackSection = {
           text: " screens the slide-up would ride on.",
         },
       ],
-      visualCaption: "Cards, CTA, copy, toast, and host screens. Visual not in yet.",
+      visualCaption: "Component explorations — cards, CTA, copy, toast, and tiles.",
     },
   ],
 };
@@ -351,7 +365,7 @@ export const finalDesignSection: StackSection = {
           text: ". A few moments have light sound, and the motion is tuned so the slide-ups and toasts feel like the app, not a slideshow. Built as a concept on Matiks patterns, not the live product.",
         },
       ],
-      visualCaption: "Interactive prototype embed. Not in yet.",
+      visualCaption: "Interactive prototype",
     },
   ],
 };
@@ -371,7 +385,15 @@ export const edgeCasesSection: StackSection = {
         },
         { text: "Invite fail", highlight: true },
         {
-          text: " when something breaks on the technical or server side, a slow internet state, and a prompt to get back into the app after someone leaves to refer. Referral tracking needs a UI skeleton while data is loading, and an ",
+          text: " when something breaks on the technical or server side, a ",
+        },
+        { text: "slow internet state", highlight: true },
+        {
+          text: ", and a prompt to get back into the app after someone leaves to refer. Referral tracking needs a ",
+        },
+        { text: "UI skeleton", highlight: true },
+        {
+          text: " while data is loading, and an ",
         },
         { text: "empty state", highlight: true },
         {
@@ -382,7 +404,12 @@ export const edgeCasesSection: StackSection = {
           text: " copy shows so they know the action is working.",
         },
       ],
-      visualCaption: "Fail, slow, return, skeleton, empty, sending. Visual not in yet.",
+      visualCaption: "Edge states — skeleton, empty, sending, network, invite fail.",
+      visualSrc: "/case/edge-case.png",
+      visualAlt:
+        "Edge cases: UI skeleton, empty track referral, sending invite, network toast, and invite fail toast",
+      // Tall stacked frames (~2.5× board width); grow height, keep width.
+      visualMinHeight: 2200,
     },
   ],
 };
@@ -397,9 +424,6 @@ export const handoffSection: StackSection = {
       partTitle: "Handoff",
       as: "h2",
       descriptionParts: [
-        {
-          text: "Handoff is the working files. ",
-        },
         { text: "Figma", highlight: true },
         {
           text: " has the screens and components; ",
@@ -409,10 +433,16 @@ export const handoffSection: StackSection = {
           text: " has the flows and decision boards. Links below.",
         },
       ],
-      visualCaption: "Working files. Links when ready.",
+      visualCaption: "",
       links: [
-        { label: "Figma", href: "#" },
-        { label: "FigJam", href: "#" },
+        {
+          label: "Figma",
+          href: "https://www.figma.com/design/eqalWEMDFEKbkyeZecVBLE/Matiks-Referral-Redesign?node-id=0-1&t=1JZUuq6d5cS9sjA5-1",
+        },
+        {
+          label: "FigJam",
+          href: "https://www.figma.com/board/kYKxqf1OaoS9LU3FGPNTRU/Matiks-Research?node-id=0-1&t=Q7OYH6FMkroe2NWw-1",
+        },
       ],
     },
   ],

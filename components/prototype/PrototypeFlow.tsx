@@ -46,17 +46,17 @@ const TRACK_OPTIONS: { value: TrackState; label: string }[] = [
 
 function ReloadIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M19.5 12a7.5 7.5 0 1 1-2.1-5.2"
+        d="M19.5 12a7.5 7.5 0 1 1-2.15-5.25"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.75"
         strokeLinecap="round"
       />
       <path
         d="M19.5 4.5v5h-5"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -65,54 +65,77 @@ function ReloadIcon() {
 }
 
 function SoundIcon({ on }: { on: boolean }) {
-  return on ? (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M4 10v4h3l4 3V7L7 10H4Z" fill="currentColor" />
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M15.5 8.5a4.5 4.5 0 0 1 0 7M17.8 6.2a7.5 7.5 0 0 1 0 11.6"
+        d="M4.5 9.5v5h3.2L12 18.2V5.8L7.7 9.5H4.5Z"
         stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
       />
-    </svg>
-  ) : (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M4 10v4h3l4 3V7L7 10H4Z" fill="currentColor" />
-      <path
-        d="M16 9l5 5M21 9l-5 5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      {on ? (
+        <>
+          <path
+            d="M15.2 9.2a3.4 3.4 0 0 1 0 5.6"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          />
+          <path
+            d="M17.8 6.8a6.2 6.2 0 0 1 0 10.4"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          />
+        </>
+      ) : (
+        <path
+          d="M15.5 9.5l5 5M20.5 9.5l-5 5"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+        />
+      )}
     </svg>
   );
 }
 
 function MotionIcon({ on }: { on: boolean }) {
-  return on ? (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4 12h3l2-6 3 12 2-6h6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  ) : (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4 12h16"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M8 8l8 8M16 8l-8 8"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
+      {on ? (
+        <>
+          {/* Easing curve — motion as design language, not ECG */}
+          <path
+            d="M4 16c3.2 0 4.2-8 8-8s4.8 8 8 8"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          />
+          <path
+            d="M17.5 6.5l2.5 1.5-1.5 2.5"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </>
+      ) : (
+        <>
+          <path
+            d="M4 12h16"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          />
+          <path
+            d="M15.5 8.5l5 5M20.5 8.5l-5 5"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          />
+        </>
+      )}
     </svg>
   );
 }
@@ -146,15 +169,25 @@ export default function PrototypeFlow() {
   };
 
   const selectFlow = (id: FlowId) => {
-    if (soundOn && (id === "slideup1" || id === "slideup2" || id === "slideup4")) {
-      playPrototypeSfx("bonus");
-    } else {
-      void unlockPrototypeSfx();
-    }
+    // Switch first so a sound failure never blocks navigation
     if (id === "track-referral" && flow !== "track-referral") {
       setTrackReturnTo(flow);
     }
     setFlow(id);
+    try {
+      if (
+        soundOn &&
+        (id === "slideup1" || id === "slideup2" || id === "slideup4")
+      ) {
+        void unlockPrototypeSfx().then(() => {
+          playPrototypeSfx("bonus");
+        });
+      } else {
+        void unlockPrototypeSfx();
+      }
+    } catch {
+      // Sound must never break the prototype controls
+    }
   };
 
   const returnFromTrackReferral = () => {
@@ -235,9 +268,10 @@ export default function PrototypeFlow() {
           className="prototype-flow__controls"
           aria-label="Prototype controls"
         >
-          <div className="case-seg">
+          <div className="prototype-flow__tools-block">
             <p className="case-seg__label">Tools</p>
-            <div className="prototype-flow__tools-row">
+            <div className="case-seg case-seg--tools">
+              <div className="prototype-flow__tools-row">
               <button
                 type="button"
                 className="prototype-flow__reload"
@@ -292,6 +326,7 @@ export default function PrototypeFlow() {
                 </button>
               </div>
             </div>
+            </div>
           </div>
 
           <CaseSegmentedControl
@@ -317,6 +352,7 @@ export default function PrototypeFlow() {
             options={TRACK_OPTIONS}
             onChange={setTrackState}
             disabled={!trackSelected}
+            disabledHint="Available for Track Referral flow"
           />
         </aside>
       </div>
