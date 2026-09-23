@@ -15,6 +15,7 @@ I chose **refer slide-ups after peak moments in play** over **a streak-revoke re
 1. `streak-revoke referral feature`
 2. `do not miss streaks very often`
 3. `start a new game right away`
+4. `appears about once a week`
 
 ## Additional trade-offs (approved draft, not required on page)
 

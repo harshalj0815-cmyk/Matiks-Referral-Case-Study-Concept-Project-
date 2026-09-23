@@ -16,6 +16,8 @@ export type StackPart = {
   visualAlt?: string;
   /** Min height for tall stacked visuals (width stays board width). */
   visualMinHeight?: number;
+  /** Override slot corner radius. Use 0 for square corners. */
+  visualRadius?: number | string;
   links?: { label: string; href: string }[];
 };
 
@@ -71,10 +73,12 @@ export const featureContext: StackSection = {
           text: ", while that feeling is still fresh.",
         },
       ],
-      visualCaption: "Joy moment → refer ask → invite sent.",
+      visualCaption: "Peak moment → refer ask → invite sent.",
       visualSrc: "/case/what-is-feature.png",
       visualAlt:
-        "What is the feature: joy moment, refer slide-up with reward, then share invite with a friend",
+        "What is the feature: peak moment, refer ask with reward discovery, then invite sent",
+      visualRadius: 0,
+      visualMinHeight: 540,
     },
     {
       id: "context",
@@ -205,7 +209,10 @@ export const researchSection: StackSection = {
           text: ". Some of that gap may be priming, or people who don't want to look uninformed. I still moved ahead on the qualitative signal that discoverability was the real issue in play.",
         },
       ],
-      visualCaption: "Survey vs interview tension. Visual not in yet.",
+      visualCaption: "Survey vs interview tension on refer awareness.",
+      visualSrc: "/case/quantitative.png",
+      visualAlt:
+        "Quantitative research: survey findings contrasted with interview discoverability tension",
     },
     {
       id: "insights",
@@ -226,7 +233,10 @@ export const researchSection: StackSection = {
         { text: "share at a particular moment", highlight: true },
         { text: "." },
       ],
-      visualCaption: "Discoverability and excite moments. Visual not in yet.",
+      visualCaption: "Player excitement triggers and Matiks referral experiences.",
+      visualSrc: "/case/insights.png",
+      visualAlt:
+        "Insights: AI summaries of player excitement triggers and Matiks referral experiences with interview sticky notes",
     },
   ],
 };
@@ -250,14 +260,25 @@ export const ideationSection: StackSection = {
         },
         { text: "streak revoke", highlight: true },
         {
-          text: ", where referrals would help restore a long broken streak. There was a browser trial so friends could try before install, and a Play Store trial game option that was removed by Play Store earlier. Another direction was a ",
+          text: ", where referrals would help restore a long broken streak. There was a ",
+        },
+        { text: "browser trial", highlight: true },
+        {
+          text: " so friends could try before install, and a ",
+        },
+        { text: "Play Store Instant option", highlight: true },
+        {
+          text: " that was removed by Play Store earlier. Another direction was a ",
         },
         { text: "Hyrox-like monthly tournament", highlight: true },
         {
           text: ": an event you enter with a ticket, and that ticket comes from referring someone. More ideas showed up along the way. Most died on research or platform limits. What stayed pointed at refer in play, rather than building a whole new acquisition product around events or trials.",
         },
       ],
-      visualCaption: "Paper ideas and killed bets. Visual not in yet.",
+      visualCaption: "Paper ideas and killed bets.",
+      visualSrc: "/case/idea-explore.png",
+      visualAlt:
+        "Idea explore: paper referral ideas including streak revoke, browser trial, Play Store Instant, and Hyrox-like tournament",
     },
     {
       id: "design-iterations",
@@ -331,8 +352,10 @@ export const decisionsSection: StackSection = {
         },
         { text: "start a new game right away", highlight: true },
         {
-          text: ". That was acceptable because the metric is referrals per person per month, core play is a guardrail that must not get worse, and the ask only appears about once a week.",
+          text: ". That was acceptable because the metric is referrals per person per month, core play is a guardrail that must not get worse, and the ask only ",
         },
+        { text: "appears about once a week", highlight: true },
+        { text: "." },
       ],
       visualCaption: "Chosen path vs killed options. Visual not in yet.",
     },
@@ -492,7 +515,7 @@ export const learningsSection: StackSection = {
           },
         ],
       ],
-      visualCaption: "Process notes and prototype craft. Visual not in yet.",
+      visualCaption: "",
     },
   ],
 };

@@ -274,19 +274,22 @@ function VisualSlot({
   fill = false,
   src,
   alt,
+  radius = mediaRadius,
 }: {
   caption: string;
   minHeight?: number;
   fill?: boolean;
   src?: string;
   alt?: string;
+  radius?: number | string;
 }) {
   const [failed, setFailed] = useState(false);
   const showImage = Boolean(src) && !failed;
   // Bust sticky 404s in previews after a new public asset is dropped in.
   const resolvedSrc = src
-    ? `${src}${src.includes("?") ? "&" : "?"}v=7`
+    ? `${src}${src.includes("?") ? "&" : "?"}v=13`
     : undefined;
+  const square = radius === 0 || radius === "0";
 
   useEffect(() => {
     setFailed(false);
@@ -295,8 +298,8 @@ function VisualSlot({
   return (
     <div
       style={{
-        background: showImage ? "transparent" : wash,
-        borderRadius: mediaRadius,
+        background: showImage && !square ? "transparent" : wash,
+        borderRadius: radius,
         minHeight: fill ? 0 : minHeight,
         flex: fill ? 1 : undefined,
         display: "flex",
@@ -320,6 +323,7 @@ function VisualSlot({
             height: fill ? "100%" : "auto",
             minHeight: fill ? 0 : undefined,
             objectFit: fill ? "cover" : "contain",
+            borderRadius: square ? 0 : undefined,
           }}
         />
       ) : (
@@ -492,6 +496,7 @@ function OpenStackPart({
             src={part.visualSrc}
             alt={part.visualAlt}
             minHeight={part.visualMinHeight ?? 420}
+            radius={part.visualRadius ?? mediaRadius}
           />
         )
       ) : null}
