@@ -1,4 +1,13 @@
-# Final feature design
+# Prototype
+
+Status: approved · locked · live under Final feature design (`#final-feature-design`)
+
+## Notes
+
+- Section is prototype-led; copy only orients.
+- Green section label stays **Final feature design**; h2 heading is **Prototype**.
+
+## Final (site copy)
 
 Status: approved · locked · not in live case study yet
 

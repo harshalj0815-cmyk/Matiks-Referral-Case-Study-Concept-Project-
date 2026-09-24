@@ -61,7 +61,7 @@ export default function Page() {
               letterSpacing: "-0.03em",
             }}
           >
-            matiks
+            Matiks (Referral)
           </a>
           <span
             className="nav-mid"
@@ -71,7 +71,7 @@ export default function Page() {
               color: mute,
             }}
           >
-            Referral case study
+            Concept case study
           </span>
           <a
             href="#ai-prototype"

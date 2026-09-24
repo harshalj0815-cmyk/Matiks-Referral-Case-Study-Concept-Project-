@@ -62,21 +62,23 @@ export const featureContext: StackSection = {
           text: ". It asks players to share what they just felt by ",
         },
         {
-          text: "referring friends and family with a tracked invite, instead of only recommending the game in conversation",
+          text: "referring friends and family with a tracked invite",
           highlight: true,
         },
         {
-          text: ". It shows up in the regular flow of play, ",
+          text: ", instead of only recommending the game in conversation. It shows up in the ",
         },
-        { text: "after a good moment in the game", highlight: true },
+        { text: "regular flow", highlight: true },
+        { text: " of play, after a " },
+        { text: "good moment in the game", highlight: true },
         {
           text: ", while that feeling is still fresh.",
         },
       ],
-      visualCaption: "Peak moment → refer ask → invite sent.",
+      visualCaption: "Situation → refer ask → invite sent.",
       visualSrc: "/case/what-is-feature.png",
       visualAlt:
-        "What is the feature: peak moment, refer ask with reward discovery, then invite sent",
+        "What is the feature: situation screen, refer ask slide-up, then invite sent in chat",
       visualRadius: 0,
       visualMinHeight: 540,
     },
@@ -100,10 +102,10 @@ export const featureContext: StackSection = {
         },
         { text: "." },
       ],
-      visualCaption: "Excite moments in daily play — close win, personal best, streak.",
+      visualCaption: "Usual flow moments — duel win, streak, personal best.",
       visualSrc: "/case/where-it-sits.png",
       visualAlt:
-        "Where it sits: referral slide-ups in daily play for close win, personal best, and streak",
+        "Where it sits: duel victory, streaks, and puzzle personal-best screens in daily play",
     },
   ],
 };
@@ -123,14 +125,14 @@ export const problemSection = {
     { text: "share the app name in conversation", highlight: true },
     { text: " or tell them to " },
     { text: "search on the Play Store", highlight: true },
-    { text: ", or they " },
-    { text: "introduced it as a math game", highlight: true },
-    { text: ", so interest dies before giving a try." },
+    { text: ", or they introduced it as a math game, so " },
+    { text: "interest dies before giving a try", highlight: true },
+    { text: "." },
   ] as TextPart[],
   visualCaption: "Interview quotes on talk-only share, late discovery, math pitch, and Play Store.",
   visualSrc: "/case/problem.png",
   visualAlt:
-    "Problem evidence: six interview sticky notes on Play Store share, late discovery, math pitch, unused referrals, settings find, and Hindi Play Store note",
+    "Problem evidence: six interview sticky notes on Play Store share, late discovery, math pitch, unused referrals, settings find, and name-only Play Store share",
   solves: {
     id: "how-redesign-solves-it",
     partTitle: "How redesign solves it",
@@ -165,11 +167,11 @@ export const researchSection: StackSection = {
       as: "h2",
       descriptionParts: [
         {
-          text: "I spoke with habitual Matiks players I already knew, and others from Discord and LinkedIn. Calls were transcribed, broken into atomic notes, and sorted into ",
+          text: "I spoke with habitual Matiks players I already knew, and others from Discord and LinkedIn. Calls were transcribed, broken into atomic notes, and sorted into affinity clusters around share and refer friction. ",
         },
-        { text: "affinity clusters", highlight: true },
+        { text: "Five clusters came out of that work", highlight: true },
         {
-          text: " around share and refer friction. Five clusters came out of that work. The ones I kept were where friends lose interest after a bad pitch, and where people stick to ",
+          text: ". The ones I kept were where friends lose interest after a bad pitch, and where people stick to ",
         },
         {
           text: "talk or Play Store instead of the referral link",
@@ -206,8 +208,14 @@ export const researchSection: StackSection = {
         },
         { text: "hard to discover", highlight: true },
         {
-          text: ". Some of that gap may be priming, or people who don't want to look uninformed. I still moved ahead on the qualitative signal that discoverability was the real issue in play.",
+          text: ". Some of that ",
         },
+        { text: "gap may be priming", highlight: true },
+        {
+          text: ", or people who don't want to look uninformed. I still moved ahead on the qualitative signal that ",
+        },
+        { text: "discoverability was the real issue", highlight: true },
+        { text: " in play." },
       ],
       visualCaption: "Survey vs interview tension on refer awareness.",
       visualSrc: "/case/quantitative.png",
@@ -220,11 +228,11 @@ export const researchSection: StackSection = {
       as: "h3",
       descriptionParts: [
         {
-          text: "After the research, the main issue looked like ",
+          text: "After the research, the main issue looked like discoverability. Few people were already referring through direct conversation, often because they were unaware of the feature, and because ",
         },
-        { text: "discoverability", highlight: true },
+        { text: "it sat inside Settings", highlight: true },
         {
-          text: ". Few people were already referring through direct conversation, often because they were unaware of the feature, and because it sat deep inside Settings. The interview clusters also pointed at how to implement referral. Users get ",
+          text: ". The interview clusters also pointed at how to implement referral. Users get ",
         },
         { text: "excited at a particular moment", highlight: true },
         {
@@ -272,7 +280,14 @@ export const ideationSection: StackSection = {
         },
         { text: "Hyrox-like monthly tournament", highlight: true },
         {
-          text: ": an event you enter with a ticket, and that ticket comes from referring someone. More ideas showed up along the way. Most died on research or platform limits. What stayed pointed at refer in play, rather than building a whole new acquisition product around events or trials.",
+          text: ": an event you enter with a ticket, and that ticket comes from referring someone. More ideas showed up along the way. ",
+        },
+        {
+          text: "Most died on research or platform limits",
+          highlight: true,
+        },
+        {
+          text: ". What stayed pointed at refer in play, rather than building a whole new acquisition product around events or trials.",
         },
       ],
       visualCaption: "Paper ideas and killed bets.",
@@ -290,11 +305,17 @@ export const ideationSection: StackSection = {
         },
         { text: "card variations", highlight: true },
         {
-          text: ", both look and feel and what the card could do, plus options for the CTA, ",
+          text: ", both look and feel and what the card could do, plus options for the ",
         },
+        { text: "CTA", highlight: true },
+        { text: ", " },
         { text: "copywriting", highlight: true },
         {
-          text: " variants, and multiple toast treatments. Separately, because I was building on the previous version of the Matiks app, I also redesigned the ",
+          text: " variants, and multiple ",
+        },
+        { text: "toast", highlight: true },
+        {
+          text: " treatments. Separately, because I was building on the previous version of the Matiks app, I also redesigned the ",
         },
         { text: "victory and puzzle completion", highlight: true },
         {
@@ -321,7 +342,11 @@ export const decisionsSection: StackSection = {
         },
         { text: "start with a non-math first game", highlight: true },
         {
-          text: " after the existing tutorial, so the first taste is not a cold math pitch. I decided that when someone shares a refer, it should ",
+          text: ", so the ",
+        },
+        { text: "first taste is not a cold math pitch", highlight: true },
+        {
+          text: ". I decided that when someone shares a refer, it should ",
         },
         { text: "go out with the visual", highlight: true },
         {
@@ -332,7 +357,11 @@ export const decisionsSection: StackSection = {
           text: ", so the loop does not die in another app's share sheet.",
         },
       ],
-      visualCaption: "Decision board / FigJam. Visual not in yet.",
+      visualCaption: "Annotated decision flow — victory through pass-it-on.",
+      visualSrc: "/case/decisions.png",
+      visualAlt:
+        "Key design decisions: annotated screens for victory redesign, refer slide-up, chat invite, return nudge, friend joined, track referral, Mind Snap first game, and pass-it-on acquisition loop",
+      visualMinHeight: 4100,
     },
     {
       id: "trade-offs",
@@ -357,7 +386,6 @@ export const decisionsSection: StackSection = {
         { text: "appears about once a week", highlight: true },
         { text: "." },
       ],
-      visualCaption: "Chosen path vs killed options. Visual not in yet.",
     },
   ],
 };
@@ -369,7 +397,7 @@ export const finalDesignSection: StackSection = {
   parts: [
     {
       id: "final-feature-design",
-      partTitle: "Final feature design",
+      partTitle: "Prototype",
       as: "h2",
       descriptionParts: [
         {
@@ -430,7 +458,7 @@ export const edgeCasesSection: StackSection = {
       visualCaption: "Edge states — skeleton, empty, sending, network, invite fail.",
       visualSrc: "/case/edge-case.png",
       visualAlt:
-        "Edge cases: UI skeleton, empty track referral, sending invite, network toast, and invite fail toast",
+        "Edge cases: track referral skeleton, empty state, sending invite, weak internet toast, and invite fail toast",
       // Tall stacked frames (~2.5× board width); grow height, keep width.
       visualMinHeight: 2200,
     },
@@ -460,7 +488,7 @@ export const handoffSection: StackSection = {
       links: [
         {
           label: "Figma",
-          href: "https://www.figma.com/design/eqalWEMDFEKbkyeZecVBLE/Matiks-Referral-Redesign?node-id=0-1&t=1JZUuq6d5cS9sjA5-1",
+          href: "https://www.figma.com/design/eqalWEMDFEKbkyeZecVBLE/Matiks-Referral-Redesign?node-id=1012-1501&t=Df4GEp0kcJGWiP1x-1",
         },
         {
           label: "FigJam",
@@ -511,11 +539,14 @@ export const learningsSection: StackSection = {
         ],
         [
           {
-            text: "Building the prototype with AI and Paper (from Figma), plus light sound (UISFX and SoundCN) and tuned motion, made it easier to show the flow instead of only describing it.",
+            text: "First time I made the prototype with AI and Paper MCP (from Figma), plus light sound (UISFX and SoundCN) and tuned motion, and it made it easier to show the flow instead of only describing it.",
           },
         ],
       ],
       visualCaption: "",
+      visualSrc: "/case/thank-you.png",
+      visualAlt:
+        "Thank you — Matiks collage with Thank You mark, merch, streak screen, and mascot",
     },
   ],
 };

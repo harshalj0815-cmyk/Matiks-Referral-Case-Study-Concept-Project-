@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Bebas_Neue, Montserrat } from "next/font/google";
 import PrototypeFlow from "@/components/prototype/PrototypeFlow";
 import "@/components/prototype/prototype.css";
@@ -20,8 +21,34 @@ const bebasNeue = Bebas_Neue({
 
 /** Interactive Matiks prototype, sized for the case study Final design section. */
 export function EmbeddedPrototype() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inViewRef = useRef(false);
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible =
+          entry.isIntersecting && entry.intersectionRatio >= 0.4;
+        if (visible && !inViewRef.current) {
+          inViewRef.current = true;
+          window.dispatchEvent(new Event("matiks-prototype-reset"));
+        } else if (!entry.isIntersecting) {
+          inViewRef.current = false;
+        }
+      },
+      { threshold: [0, 0.4, 0.6] },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={rootRef}
       id="ai-prototype"
       className={`${montserrat.variable} ${bebasNeue.variable} ${montserrat.className} prototype-canvas prototype-canvas--embed`}
       style={{ scrollMarginTop: 96 }}

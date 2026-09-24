@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import IPhoneFrame from "@/components/prototype/IPhoneFrame";
 import CaseSegmentedControl from "@/components/prototype/CaseSegmentedControl";
 import DuelVictoryScreen from "@/components/prototype/screens/DuelVictoryScreen";
@@ -152,6 +152,32 @@ export default function PrototypeFlow() {
   const [animationsOn, setAnimationsOn] = useState(true);
 
   const trackSelected = flow === "track-referral";
+
+  const resetToStart = useCallback(() => {
+    setFlow("slideup1");
+    setToast("success");
+    setTrackState("full");
+    setTrackReturnTo("slideup1");
+    setReloadKey((n) => n + 1);
+  }, []);
+
+  useEffect(() => {
+    setPrototypeSfxEnabled(soundOn);
+  }, [soundOn]);
+
+  useEffect(() => {
+    let lastResetAt = 0;
+    const onReset = () => {
+      const now = performance.now();
+      if (now - lastResetAt < 600) return;
+      lastResetAt = now;
+      resetToStart();
+    };
+    window.addEventListener("matiks-prototype-reset", onReset);
+    return () => {
+      window.removeEventListener("matiks-prototype-reset", onReset);
+    };
+  }, [resetToStart]);
 
   const setSoundOn = useCallback((value: boolean) => {
     setSoundOnState(value);

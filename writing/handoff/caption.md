@@ -18,7 +18,7 @@ Status: approved · locked · not in live case study yet
 
 ### Links
 
-- Figma: https://www.figma.com/design/eqalWEMDFEKbkyeZecVBLE/Matiks-Referral-Redesign?node-id=0-1&t=1JZUuq6d5cS9sjA5-1
+- Figma: https://www.figma.com/design/eqalWEMDFEKbkyeZecVBLE/Matiks-Referral-Redesign?node-id=1012-1501&t=Df4GEp0kcJGWiP1x-1
 - FigJam: https://www.figma.com/board/kYKxqf1OaoS9LU3FGPNTRU/Matiks-Research?node-id=0-1&t=Q7OYH6FMkroe2NWw-1
 
 No visual slot — tiles are the handoff.

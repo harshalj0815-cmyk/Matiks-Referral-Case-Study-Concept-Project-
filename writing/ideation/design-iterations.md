@@ -11,10 +11,12 @@ Status: approved · restyled · structure fixed · not in live case study yet
 
 ## Final (site copy)
 
-Design iterations were about tightening the pieces once the direction was clearer. I explored a lot of **card variations**, both look and feel and what the card could do, plus options for the CTA, **copywriting** variants, and multiple toast treatments. Separately, because I was building on the previous version of the Matiks app, I also redesigned the **victory and puzzle completion** screens the slide-up would ride on.
+Design iterations were about tightening the pieces once the direction was clearer. I explored a lot of **card variations**, both look and feel and what the card could do, plus options for the **CTA**, **copywriting** variants, and multiple **toast** treatments. Separately, because I was building on the previous version of the Matiks app, I also redesigned the **victory and puzzle completion** screens the slide-up would ride on.
 
 ### Highlight spans
 
 1. `card variations`
-2. `copywriting`
-3. `victory and puzzle completion`
+2. `CTA`
+3. `copywriting`
+4. `toast`
+5. `victory and puzzle completion`

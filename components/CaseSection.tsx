@@ -287,7 +287,7 @@ function VisualSlot({
   const showImage = Boolean(src) && !failed;
   // Bust sticky 404s in previews after a new public asset is dropped in.
   const resolvedSrc = src
-    ? `${src}${src.includes("?") ? "&" : "?"}v=13`
+    ? `${src}${src.includes("?") ? "&" : "?"}v=15`
     : undefined;
   const square = radius === 0 || radius === "0";
 
@@ -297,6 +297,7 @@ function VisualSlot({
 
   return (
     <div
+      className={showImage ? "case-visual-slot case-visual-slot--image" : "case-visual-slot"}
       style={{
         background: showImage && !square ? "transparent" : wash,
         borderRadius: radius,

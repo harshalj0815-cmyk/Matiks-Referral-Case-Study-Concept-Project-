@@ -10,7 +10,7 @@ Interviews and surveys can disagree, and that disagreement is useful. Quantitati
 
 Putting the ask at peak moments helps a tracked refer land, but it costs something on the path to the next game. Caps, empty states, and fail toasts are part of the design, not leftovers.
 
-Building the prototype with AI and Paper (from Figma), plus light sound (UISFX and SoundCN) and tuned motion, made it easier to show the flow instead of only describing it.
+First time I made the prototype with AI and Paper MCP (from Figma), plus light sound (UISFX and SoundCN) and tuned motion, and it made it easier to show the flow instead of only describing it.
 
 ### Highlight spans
 

@@ -94,3 +94,10 @@ html.page-scrolled .site-header {
     transition: none !important;
   }
 }
+
+/* Mobile only — drop forced visual min-height so landscape images aren't padded */
+@media (max-width: 640px) {
+  .case-visual-slot--image {
+    min-height: 0 !important;
+  }
+}
