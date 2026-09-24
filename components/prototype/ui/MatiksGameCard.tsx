@@ -32,7 +32,12 @@ export default function MatiksGameCard({
       {...rest}
     >
       <div className="mk-game-card__media">
-        <img className="mk-game-card__image" src={imageSrc} alt="" />
+        <img
+          className="mk-game-card__image"
+          src={imageSrc}
+          alt=""
+          draggable={false}
+        />
         <MatiksBadge tone={difficulty} className="mk-game-card__badge">
           {badgeLabel}
         </MatiksBadge>
@@ -58,6 +63,7 @@ export default function MatiksGameCard({
             className="mk-game-card__chevron"
             src="/prototype/matiks/icons/caret-right-lime.svg"
             alt=""
+            draggable={false}
           />
         </span>
       </div>

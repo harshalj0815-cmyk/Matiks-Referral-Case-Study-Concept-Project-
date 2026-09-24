@@ -120,7 +120,10 @@ export default function DuelVictoryScreen({
 
       {friendToast && !sheetOpen ? (
         <div className="duel-victory__toast">
-          <MatiksToast variant="friend" />
+          <MatiksToast
+            variant="friend"
+            onAutoDismiss={() => setFriendToast(false)}
+          />
         </div>
       ) : null}
 

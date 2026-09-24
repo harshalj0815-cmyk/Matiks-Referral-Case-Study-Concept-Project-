@@ -80,47 +80,58 @@ export function IterationsBoard({
   return (
     <>
       <div className="iter-board-wrap" style={{ width: "100%" }}>
-        <div className="iter-board__toolbar">
-          <button
-            type="button"
-            className={`iter-board__toggle${rotateOn ? " iter-board__toggle--on" : ""}`}
-            aria-pressed={rotateOn}
-            aria-label={
-              rotateOn
-                ? "Rotate on — click to stop autoplay"
-                : "Rotate off — click to resume autoplay"
-            }
-            onClick={() => setRotateOn((v) => !v)}
-          >
-            <span className="iter-board__toggle-copy">
-              <RotateIcon on={rotateOn} />
-              Rotate
-            </span>
-            <span className="iter-board__switch" aria-hidden>
-              <span className="iter-board__switch-knob" />
-            </span>
-          </button>
+        <div className="iter-board__gate" role="status">
+          <p className="iter-board__gate-eyebrow">Design iterations</p>
+          <h2 className="iter-board__gate-title">Open this on a desktop</h2>
+          <p className="iter-board__gate-body">
+            The component board needs a wider screen to browse cards, toasts,
+            and copy side by side. Come back on a laptop to explore the
+            iterations.
+          </p>
         </div>
 
-        <div
-          className={className}
-          style={{
-            width: "100%",
-            background: "#ffffff",
-            borderRadius: "clamp(16px, 4.5vw, 48px)",
-            boxSizing: "border-box",
-            padding: "28px 32px",
-            display: "grid",
-            gridTemplateColumns: "auto 1fr",
-            gridTemplateRows: "auto auto",
-            columnGap: 48,
-            rowGap: 20,
-            alignContent: "center",
-            justifyContent: "center",
-            justifyItems: "stretch",
-            overflow: "hidden",
-          }}
-        >
+        <div className="iter-board__desktop">
+          <div className="iter-board__toolbar">
+            <button
+              type="button"
+              className={`iter-board__toggle${rotateOn ? " iter-board__toggle--on" : ""}`}
+              aria-pressed={rotateOn}
+              aria-label={
+                rotateOn
+                  ? "Rotate on — click to stop autoplay"
+                  : "Rotate off — click to resume autoplay"
+              }
+              onClick={() => setRotateOn((v) => !v)}
+            >
+              <span className="iter-board__toggle-copy">
+                <RotateIcon on={rotateOn} />
+                Rotate
+              </span>
+              <span className="iter-board__switch" aria-hidden>
+                <span className="iter-board__switch-knob" />
+              </span>
+            </button>
+          </div>
+
+          <div
+            className={className}
+            style={{
+              width: "100%",
+              background: "#ffffff",
+              borderRadius: "clamp(16px, 4.5vw, 48px)",
+              boxSizing: "border-box",
+              padding: "28px 32px",
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gridTemplateRows: "auto auto",
+              columnGap: 48,
+              rowGap: 20,
+              alignContent: "center",
+              justifyContent: "center",
+              justifyItems: "stretch",
+              overflow: "hidden",
+            }}
+          >
         <div
           style={{
             gridColumn: 1,
@@ -257,12 +268,50 @@ export function IterationsBoard({
         </div>
       </div>
       </div>
+      </div>
 
       <style>{`
         .iter-board-wrap {
           display: flex;
           flex-direction: column;
           gap: 12px;
+        }
+        .iter-board__gate {
+          display: none;
+          box-sizing: border-box;
+          width: min(360px, 100%);
+          margin: 0 auto;
+          padding: 8px 4px;
+          text-align: center;
+        }
+        .iter-board__gate-eyebrow {
+          margin: 0 0 10px;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: #16c45a;
+        }
+        .iter-board__gate-title {
+          margin: 0 0 12px;
+          font-size: 28px;
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.15;
+          color: ${ink};
+        }
+        .iter-board__gate-body {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.55;
+          color: ${mute};
+        }
+        .iter-board__desktop {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
         }
         .iter-board__toolbar {
           display: flex;
@@ -329,7 +378,15 @@ export function IterationsBoard({
           outline: 2px solid #16c45a;
           outline-offset: 2px;
         }
-        @media (max-width: 820px) {
+        @media (max-width: 640px) {
+          .iter-board__gate {
+            display: block;
+          }
+          .iter-board__desktop {
+            display: none;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 820px) {
           .${className} {
             grid-template-columns: 1fr !important;
             grid-template-rows: auto !important;

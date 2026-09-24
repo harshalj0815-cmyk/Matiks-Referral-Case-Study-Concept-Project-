@@ -149,6 +149,9 @@ export default function PuzzleCompletionScreen({
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
+      // Stop native image-drag / text selection from stealing the gesture
+      event.preventDefault();
+      window.getSelection()?.removeAllRanges();
       cancelSettle();
       pointerId = event.pointerId;
       startX = event.clientX;

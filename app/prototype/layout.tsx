@@ -30,7 +30,15 @@ export default function PrototypeLayout({
     <div
       className={`${montserrat.variable} ${bebasNeue.variable} ${montserrat.className} prototype-canvas`}
     >
-      {children}
+      <div className="prototype-desktop-gate" role="status">
+        <p className="prototype-desktop-gate__eyebrow">Interactive prototype</p>
+        <h1 className="prototype-desktop-gate__title">Open this on a desktop</h1>
+        <p className="prototype-desktop-gate__body">
+          The phone mockup and controls sit side by side, so they need a wider
+          screen. Come back on a laptop to try the flows.
+        </p>
+      </div>
+      <div className="prototype-desktop-gate__content">{children}</div>
     </div>
   );
 }

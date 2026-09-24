@@ -14,7 +14,7 @@ export function ScrollSpyNav() {
   useEffect(() => {
     const updateActive = () => {
       const marker = window.innerHeight * 0.28;
-      let current = sections[0].id;
+      let current: string = sections[0].id;
 
       for (const section of sections) {
         const node = document.getElementById(section.id);

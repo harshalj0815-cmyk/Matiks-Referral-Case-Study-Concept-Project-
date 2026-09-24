@@ -386,6 +386,7 @@ export const decisionsSection: StackSection = {
         { text: "appears about once a week", highlight: true },
         { text: "." },
       ],
+      visualCaption: "",
     },
   ],
 };

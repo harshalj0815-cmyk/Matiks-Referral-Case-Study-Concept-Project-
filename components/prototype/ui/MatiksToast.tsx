@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import MatiksChip from "@/components/prototype/ui/MatiksChip";
 import { usePrototypePrefs } from "@/components/prototype/PrototypePrefs";
 import { playPrototypeSfx } from "@/components/prototype/sfx";
+
+const TOAST_TTL_MS = 5000;
+const TOAST_EXIT_MS = 200;
 
 type MatiksToastBase = {
   className?: string;
@@ -15,23 +18,72 @@ type MatiksToastProps =
       title?: string;
       body?: string;
       onClick?: () => void;
+      onAutoDismiss?: () => void;
     } & MatiksToastBase)
   | ({
       variant: "failed";
       title?: string;
       body?: string;
       onRetry?: () => void;
+      onAutoDismiss?: () => void;
     } & MatiksToastBase)
   | ({
       variant: "wifi";
       title?: string;
       body?: string;
       onRetry?: () => void;
+      onAutoDismiss?: () => void;
     } & MatiksToastBase);
+
+function toastClass(
+  variant: string,
+  className: string,
+  entered: boolean,
+  exiting: boolean,
+  clickable = false,
+) {
+  return [
+    "mk-toast",
+    `mk-toast--${variant}`,
+    clickable ? "mk-toast--clickable" : "",
+    entered && !exiting ? "mk-toast--entered" : "",
+    exiting ? "mk-toast--exiting" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function ToastTimer({ active }: { active: boolean }) {
+  return (
+    <span
+      className={`mk-toast__timer${active ? " mk-toast__timer--run" : ""}`}
+      aria-hidden
+    >
+      <span className="mk-toast__timer-bar" />
+    </span>
+  );
+}
 
 export default function MatiksToast(props: MatiksToastProps) {
   const className = props.className ?? "";
-  const { soundOn } = usePrototypePrefs();
+  const { soundOn, animationsOn } = usePrototypePrefs();
+  const [entered, setEntered] = useState(!animationsOn);
+  const [exiting, setExiting] = useState(false);
+  const [timerRun, setTimerRun] = useState(false);
+  const exitTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!animationsOn) {
+      setEntered(true);
+      return undefined;
+    }
+    setEntered(false);
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setEntered(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [animationsOn]);
 
   useEffect(() => {
     if (!soundOn) return;
@@ -39,9 +91,51 @@ export default function MatiksToast(props: MatiksToastProps) {
     else if (props.variant === "failed" || props.variant === "wifi") {
       playPrototypeSfx("retry");
     }
-    // Play once when this toast mounts — not when sound toggles later.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only
   }, []);
+
+  const autoDismiss = props.onAutoDismiss;
+
+  const beginExit = (after?: () => void) => {
+    if (exiting) return;
+    if (!animationsOn) {
+      after?.();
+      return;
+    }
+    setExiting(true);
+    if (exitTimerRef.current !== null) {
+      window.clearTimeout(exitTimerRef.current);
+    }
+    exitTimerRef.current = window.setTimeout(() => {
+      exitTimerRef.current = null;
+      after?.();
+    }, TOAST_EXIT_MS);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current !== null) {
+        window.clearTimeout(exitTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!autoDismiss || !entered || exiting) return undefined;
+    setTimerRun(false);
+    const start = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setTimerRun(true));
+    });
+    const done = window.setTimeout(() => {
+      beginExit(() => autoDismiss());
+    }, TOAST_TTL_MS);
+    return () => {
+      cancelAnimationFrame(start);
+      window.clearTimeout(done);
+      setTimerRun(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- beginExit is stable enough per render
+  }, [autoDismiss, entered, exiting, animationsOn]);
 
   if (props.variant === "friend") {
     const body = (
@@ -73,20 +167,24 @@ export default function MatiksToast(props: MatiksToastProps) {
       return (
         <button
           type="button"
-          className={`mk-toast mk-toast--friend mk-toast--clickable${className ? ` ${className}` : ""}`}
-          onClick={props.onClick}
+          className={toastClass("friend", className, entered, exiting, true)}
+          onClick={() => {
+            beginExit(() => props.onClick?.());
+          }}
         >
           {body}
+          <ToastTimer active={timerRun} />
         </button>
       );
     }
 
     return (
       <div
-        className={`mk-toast mk-toast--friend${className ? ` ${className}` : ""}`}
+        className={toastClass("friend", className, entered, exiting)}
         role="status"
       >
         {body}
+        <ToastTimer active={timerRun} />
       </div>
     );
   }
@@ -94,7 +192,7 @@ export default function MatiksToast(props: MatiksToastProps) {
   if (props.variant === "failed") {
     return (
       <div
-        className={`mk-toast mk-toast--failed${className ? ` ${className}` : ""}`}
+        className={toastClass("failed", className, entered, exiting)}
         role="alert"
       >
         <div className="mk-toast__row">
@@ -109,15 +207,22 @@ export default function MatiksToast(props: MatiksToastProps) {
               {props.body ?? "Couldn't send invite. Try again."}
             </p>
           </div>
-          <MatiksChip onClick={props.onRetry}>Retry</MatiksChip>
+          <MatiksChip
+            onClick={() => {
+              beginExit(() => props.onRetry?.());
+            }}
+          >
+            Retry
+          </MatiksChip>
         </div>
+        <ToastTimer active={timerRun} />
       </div>
     );
   }
 
   return (
     <div
-      className={`mk-toast mk-toast--wifi${className ? ` ${className}` : ""}`}
+      className={toastClass("wifi", className, entered, exiting)}
       role="alert"
     >
       <div className="mk-toast__row">
@@ -132,8 +237,15 @@ export default function MatiksToast(props: MatiksToastProps) {
             {props.body ?? "Check your Wi-Fi and try again."}
           </p>
         </div>
-        <MatiksChip onClick={props.onRetry}>Retry</MatiksChip>
+        <MatiksChip
+          onClick={() => {
+            beginExit(() => props.onRetry?.());
+          }}
+        >
+          Retry
+        </MatiksChip>
       </div>
+      <ToastTimer active={timerRun} />
     </div>
   );
 }

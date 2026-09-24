@@ -136,17 +136,29 @@ export default function CloseGameSlideUp({
 
       {result === "success" ? (
         <div className="close-game__toast">
-          <MatiksToast variant="friend" onClick={onSuccessToastClick} />
+          <MatiksToast
+            variant="friend"
+            onClick={onSuccessToastClick}
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
       {result === "fail1" ? (
         <div className="close-game__toast">
-          <MatiksToast variant="failed" onRetry={retry} />
+          <MatiksToast
+            variant="failed"
+            onRetry={retry}
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
       {result === "fail2" ? (
         <div className="close-game__toast">
-          <MatiksToast variant="wifi" onRetry={retry} />
+          <MatiksToast
+            variant="wifi"
+            onRetry={retry}
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
 

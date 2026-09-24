@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MatiksButton,
   MatiksChip,
@@ -56,6 +56,7 @@ export default function TrackReferralScreen({
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<InviteToastOutcome | null>(null);
   const [cardsReady, setCardsReady] = useState(!animationsOn);
+  const cardsRevealedRef = useRef(!animationsOn);
 
   // Friend-arrived toast means referrals exist — leave empty even if the
   // control still says Empty until the parent flips to Full.
@@ -82,18 +83,28 @@ export default function TrackReferralScreen({
 
   useEffect(() => {
     if (showEmpty) {
+      cardsRevealedRef.current = false;
       setCardsReady(false);
       return undefined;
     }
     // Invite toast already on screen — show cards immediately, no skeleton.
     if (result !== null || !animationsOn) {
+      cardsRevealedRef.current = true;
+      setCardsReady(true);
+      return undefined;
+    }
+    // Toast dismissed: keep cards. Don't re-run the skeleton load.
+    if (cardsRevealedRef.current) {
       setCardsReady(true);
       return undefined;
     }
     setCardsReady(false);
-    const ready = window.setTimeout(() => setCardsReady(true), 900);
+    const ready = window.setTimeout(() => {
+      cardsRevealedRef.current = true;
+      setCardsReady(true);
+    }, 900);
     return () => window.clearTimeout(ready);
-  }, [showEmpty, animationsOn, empty, result]);
+  }, [showEmpty, animationsOn, result]);
 
   const retry = () => {
     setResult(null);
@@ -104,17 +115,28 @@ export default function TrackReferralScreen({
     <div className="track-referral">
       {result === "success" ? (
         <div className="track-referral__toast">
-          <MatiksToast variant="friend" />
+          <MatiksToast
+            variant="friend"
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
       {result === "fail1" ? (
         <div className="track-referral__toast">
-          <MatiksToast variant="failed" onRetry={retry} />
+          <MatiksToast
+            variant="failed"
+            onRetry={retry}
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
       {result === "fail2" ? (
         <div className="track-referral__toast">
-          <MatiksToast variant="wifi" onRetry={retry} />
+          <MatiksToast
+            variant="wifi"
+            onRetry={retry}
+            onAutoDismiss={() => setResult(null)}
+          />
         </div>
       ) : null}
 

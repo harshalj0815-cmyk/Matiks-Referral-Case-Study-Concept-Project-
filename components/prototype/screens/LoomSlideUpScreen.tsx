@@ -17,14 +17,23 @@ export default function LoomSlideUpScreen({
 }: LoomSlideUpScreenProps) {
   const { animationsOn } = usePrototypePrefs();
   const [sheetOpen, setSheetOpen] = useState(!animationsOn);
+  const [scrimClear, setScrimClear] = useState(!animationsOn);
 
   useEffect(() => {
     if (!animationsOn) {
+      setScrimClear(true);
       setSheetOpen(true);
       return undefined;
     }
-    const timer = window.setTimeout(() => setSheetOpen(true), 1500);
-    return () => window.clearTimeout(timer);
+
+    // Hold the dim for one frame, then fade it off so the home reveals.
+    setScrimClear(false);
+    const reveal = window.setTimeout(() => setScrimClear(true), 80);
+    const sheet = window.setTimeout(() => setSheetOpen(true), 1500);
+    return () => {
+      window.clearTimeout(reveal);
+      window.clearTimeout(sheet);
+    };
   }, [animationsOn]);
 
   return (
@@ -41,6 +50,10 @@ export default function LoomSlideUpScreen({
           alt=""
         />
       </button>
+      <div
+        className={`loom-slide__scrim${scrimClear ? " loom-slide__scrim--clear" : ""}`}
+        aria-hidden
+      />
       <CloseGameSlideUp
         open={sheetOpen}
         onDismiss={() => setSheetOpen(false)}

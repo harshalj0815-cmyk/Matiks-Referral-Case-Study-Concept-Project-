@@ -17,16 +17,28 @@ function getPlayer(): UISFXPlayer | null {
 }
 
 /** Resume Web Audio from a pointer/keyboard gesture. */
-export function unlockPrototypeSfx(): Promise<boolean> {
-  return getPlayer()?.unlock() ?? Promise.resolve(false);
+export async function unlockPrototypeSfx(): Promise<boolean> {
+  try {
+    return (await getPlayer()?.unlock()) ?? false;
+  } catch {
+    return false;
+  }
 }
 
 /** Mute / unmute the shared player. */
 export function setPrototypeSfxEnabled(enabled: boolean) {
-  getPlayer()?.setEnabled(enabled);
+  try {
+    getPlayer()?.setEnabled(enabled);
+  } catch {
+    // ignore
+  }
 }
 
 /** Play a semantic cue. Returns null if locked, muted, or unavailable. */
 export function playPrototypeSfx(cue: CueName) {
-  return getPlayer()?.play(cue) ?? null;
+  try {
+    return getPlayer()?.play(cue) ?? null;
+  } catch {
+    return null;
+  }
 }

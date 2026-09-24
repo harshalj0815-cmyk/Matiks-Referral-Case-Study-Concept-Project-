@@ -3,6 +3,9 @@
 import { useState } from "react";
 import MatiksButton from "@/components/prototype/ui/MatiksButton";
 import MatiksChip from "@/components/prototype/ui/MatiksChip";
+import { usePrototypePrefs } from "@/components/prototype/PrototypePrefs";
+import { useSound } from "@/hooks/use-sound";
+import { iMoneyDialogOpenSound } from "@/sounds/i-money-dialog-open";
 
 type MatiksReferralCardProps = {
   name?: string;
@@ -31,8 +34,13 @@ export default function MatiksReferralCard({
   onClaim,
   className = "",
 }: MatiksReferralCardProps) {
+  const { soundOn } = usePrototypePrefs();
   const [sent, setSent] = useState(false);
   const [claimed, setClaimed] = useState(false);
+  const [playClaimSound] = useSound(iMoneyDialogOpenSound, {
+    soundEnabled: soundOn,
+    interrupt: true,
+  });
   const progress = Math.max(0, Math.min(100, (xp / xpGoal) * 100));
 
   return (
@@ -127,6 +135,7 @@ export default function MatiksReferralCard({
           }
           onClick={() => {
             if (claimed) return;
+            playClaimSound();
             setClaimed(true);
             onClaim?.();
           }}

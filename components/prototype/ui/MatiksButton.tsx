@@ -1,4 +1,11 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+"use client";
+
+import {
+  isValidElement,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
+import MorphSwap from "@/components/prototype/ui/MorphSwap";
 
 type MatiksButtonVariant = "primary" | "secondary" | "disabled";
 type MatiksButtonSize = "lg" | "md";
@@ -12,7 +19,24 @@ type MatiksButtonProps = {
   trailingIcon?: ReactNode;
   /** Paper 1XZ-0 dual-bar glint, sweeps L→R every 5s */
   shine?: boolean;
+  /** Cube-flip when label/icons change. Default on. */
+  morph?: boolean;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">;
+
+function imgSrc(node: ReactNode): string {
+  if (!isValidElement<{ src?: unknown }>(node)) return "";
+  return typeof node.props.src === "string" ? node.props.src : "";
+}
+
+function contentFingerprint(
+  label: ReactNode,
+  leadingIcon?: ReactNode,
+  trailingIcon?: ReactNode,
+) {
+  const text =
+    typeof label === "string" || typeof label === "number" ? String(label) : "";
+  return `${text}|${imgSrc(leadingIcon)}|${imgSrc(trailingIcon)}`;
+}
 
 export default function MatiksButton({
   children,
@@ -22,6 +46,7 @@ export default function MatiksButton({
   leadingIcon,
   trailingIcon,
   shine = false,
+  morph = true,
   className = "",
   disabled,
   type = "button",
@@ -30,6 +55,7 @@ export default function MatiksButton({
   const isDisabled = disabled || variant === "disabled";
   // Keep visual tone when disabled via prop (e.g. Claimed stays secondary type)
   const tone = variant === "disabled" ? "disabled" : variant;
+  const fingerprint = contentFingerprint(children, leadingIcon, trailingIcon);
 
   return (
     <button
@@ -47,9 +73,17 @@ export default function MatiksButton({
             </span>
           </span>
         ) : null}
-        {leadingIcon ? <span className="mk-btn__icon">{leadingIcon}</span> : null}
-        <span className="mk-btn__label">{children}</span>
-        {trailingIcon ? <span className="mk-btn__icon">{trailingIcon}</span> : null}
+        <MorphSwap fingerprint={fingerprint} enabled={morph}>
+          <>
+            {leadingIcon ? (
+              <span className="mk-btn__icon">{leadingIcon}</span>
+            ) : null}
+            <span className="mk-btn__label">{children}</span>
+            {trailingIcon ? (
+              <span className="mk-btn__icon">{trailingIcon}</span>
+            ) : null}
+          </>
+        </MorphSwap>
       </span>
     </button>
   );
