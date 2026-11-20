@@ -1,4 +1,4 @@
-# Idea explore
+# Ideas explored
 
 Status: approved · restyled to design-narrative voice · not in live case study yet
 

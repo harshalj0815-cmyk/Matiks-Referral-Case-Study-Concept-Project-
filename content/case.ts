@@ -260,7 +260,7 @@ export const ideationSection: StackSection = {
   parts: [
     {
       id: "idea-explore",
-      partTitle: "Idea explore",
+      partTitle: "Ideas explored",
       as: "h2",
       descriptionParts: [
         {
@@ -297,7 +297,7 @@ export const ideationSection: StackSection = {
       visualCaption: "Paper ideas and killed bets.",
       visualSrc: "/case/idea-explore.png",
       visualAlt:
-        "Idea explore: paper referral ideas including streak revoke, browser trial, Play Store Instant, and Hyrox-like tournament",
+        "Ideas explored: paper referral ideas including streak revoke, browser trial, Play Store Instant, and Hyrox-like tournament",
     },
     {
       id: "design-iterations",

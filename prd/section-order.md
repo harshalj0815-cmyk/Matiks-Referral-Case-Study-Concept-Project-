@@ -11,7 +11,7 @@ After thumbnail (`#thumbnail`):
    - `#quantitative` Quantitative research
    - `#insights` Insights
 4. **Ideation** — `#ideation`
-   - `#idea-explore` Idea explore
+   - `#idea-explore` Ideas explored
    - `#design-iterations` Design iterations
 5. **Key design decisions** — `#decisions`
    - `#decisions-calls` Decisions
