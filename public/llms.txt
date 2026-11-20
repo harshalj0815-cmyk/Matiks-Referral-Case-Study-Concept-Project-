@@ -6,6 +6,8 @@
 
 - **[Full text twin — use for judgment](https://matiks-concept-project.vercel.app/case.md)**  
   Complete insights list, UI inventory, edge states, iteration copy, and an explicit note that there are **no live outcome metrics** (concept only). Use this when the HTML page returns fragments or desktop gates.
+- **[HTML text twin](https://matiks-concept-project.vercel.app/case.html)**  
+  Same facts as plain HTML (`text/html`) if a tool fails to extract `/case.md`.
 
 - [Visual HTML case study](https://matiks-concept-project.vercel.app/): Same story with images (alt + captions). Iteration board and interactive prototype may show “Open this on a desktop” on narrow viewports; content is still summarized in `/case.md`.
 
