@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Figtree } from "next/font/google";
+import type { Metadata } from "next";
 import ScrollSync from "@/components/ScrollSync";
 
 const figtree = Figtree({
@@ -9,10 +10,88 @@ const figtree = Figtree({
   variable: "--font-figtree",
 });
 
-export const metadata = {
-  title: "Matiks referral · case study",
-  description:
-    "A 20-25-year-old habitual Matiks user struggles with getting friends to try the game and creating a tracked referral.",
+const siteUrl = "https://matiks-concept-project.vercel.app";
+const title = "Share the Thrill · Matiks referral concept case study";
+const description =
+  "Concept UX case study: situation-based Matiks referral slide-ups after close wins, personal bests, and streaks; 150 XP invite tracking; pass-it-on loop. Proposed feature, not a live Matiks ship. By Harshal.";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  authors: [{ name: "Harshal" }],
+  keywords: [
+    "Matiks",
+    "referral",
+    "UX case study",
+    "concept case study",
+    "product design",
+    "Share the Thrill",
+  ],
+  alternates: {
+    canonical: "/",
+    types: {
+      "text/markdown": [{ url: "/case.md", title: "Case study markdown twin" }],
+    },
+  },
+  openGraph: {
+    type: "article",
+    url: siteUrl,
+    title,
+    description,
+    siteName: "Harshal · Matiks concept case study",
+    images: [
+      {
+        url: "/case/thumbnail.png",
+        alt: "Share the Thrill: Matiks Referral at Excite Moments — concept case study cover",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/case/thumbnail.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: title,
+  headline: "Share the Thrill: Matiks Referral at Excite Moments",
+  description,
+  url: siteUrl,
+  creator: {
+    "@type": "Person",
+    name: "Harshal",
+  },
+  about: [
+    "Matiks referral UX",
+    "situation-based slide-up",
+    "product design case study",
+  ],
+  genre: "Concept UX case study",
+  inLanguage: "en",
+  isAccessibleForFree: true,
+  learningResourceType: "Case study",
+  encoding: [
+    {
+      "@type": "MediaObject",
+      encodingFormat: "text/html",
+      url: siteUrl,
+    },
+    {
+      "@type": "MediaObject",
+      encodingFormat: "text/markdown",
+      url: `${siteUrl}/case.md`,
+      name: "AI-readable markdown twin",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -23,6 +102,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${figtree.variable} ${figtree.className}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ScrollSync />
         {children}
       </body>
