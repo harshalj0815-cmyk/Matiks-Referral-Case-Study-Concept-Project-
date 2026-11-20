@@ -40,10 +40,18 @@ export const metadata: Metadata = {
     title,
     description,
     siteName: "Harshal · Matiks concept case study",
+    locale: "en_US",
     images: [
       {
-        url: "/case/thumbnail.png",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Share the Thrill: Matiks Referral at Excite Moments — concept case study cover",
+        type: "image/png",
+      },
+      {
+        url: "/case/thumbnail.png",
+        alt: "Share the Thrill case study thumbnail (full art)",
       },
     ],
   },
@@ -51,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/case/thumbnail.png"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
