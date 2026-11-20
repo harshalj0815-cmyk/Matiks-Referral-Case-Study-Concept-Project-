@@ -12,8 +12,9 @@ const figtree = Figtree({
 
 const siteUrl = "https://matiks-concept-project.vercel.app";
 const title = "Share the Thrill · Matiks referral concept case study";
+// Keep under ~155 chars so Google/OG/X previews do not truncate mid-sentence.
 const description =
-  "Concept UX case study: situation-based Matiks referral slide-ups after close wins, personal bests, and streaks; 150 XP invite tracking; pass-it-on loop. Proposed feature, not a live Matiks ship. By Harshal.";
+  "Concept UX case study: Matiks referral slide-ups at peak moments, 150 XP tracking, and a pass-it-on loop. By Harshal.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
