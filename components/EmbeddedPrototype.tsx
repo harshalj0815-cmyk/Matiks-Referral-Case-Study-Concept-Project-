@@ -58,8 +58,16 @@ export function EmbeddedPrototype() {
         <h1 className="prototype-desktop-gate__title">Open this on a desktop</h1>
         <p className="prototype-desktop-gate__body">
           The phone mockup and controls sit side by side, so they need a wider
-          screen. Come back on a laptop to try the flows.
+          screen. Come back on a laptop to try the flows. Screen inventory is
+          also in <a href="/case.md">/case.md</a>.
         </p>
+      </div>
+      <div className="sr-only">
+        Interactive prototype flows: duel victory and puzzle completion hosts;
+        excite-moment invite overlays for close win, level-up, and streak; pass
+        it on for referred users; friend-arrived toast; track invites with 150
+        XP progress; sending invite waiting state; invite fail and weak internet
+        toasts. Concept only — no live KPI results. Full text at /case.md.
       </div>
       <div className="prototype-desktop-gate__content">
         <PrototypeFlow />

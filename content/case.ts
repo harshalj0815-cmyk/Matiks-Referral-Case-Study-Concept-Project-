@@ -239,12 +239,16 @@ export const researchSection: StackSection = {
           text: " in the app. They also want to ",
         },
         { text: "share at a particular moment", highlight: true },
-        { text: "." },
+        {
+          text: ". Kept clusters: friends cool off at a math pitch, and name-only / Play Store talk instead of the link. Demoted: chance discovery as a mass-unawareness claim, and unclear rewards. Eliminated: personal-game-only (too thin). Full insight table also lives at ",
+        },
+        { text: "/case.md", highlight: true },
+        { text: " for AI-readable review." },
       ],
       visualCaption: "Player excitement triggers and Matiks referral experiences.",
       visualSrc: "/case/insights.png",
       visualAlt:
-        "Insights: AI summaries of player excitement triggers and Matiks referral experiences with interview sticky notes",
+        "Insights board: keep math cool-off and name-only share clusters; demote chance discovery and unclear rewards; eliminate personal-game-only; sticky notes on excitement and share moments",
     },
   ],
 };

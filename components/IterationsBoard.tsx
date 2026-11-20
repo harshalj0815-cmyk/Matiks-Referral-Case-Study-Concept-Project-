@@ -86,8 +86,16 @@ export function IterationsBoard({
           <p className="iter-board__gate-body">
             The component board needs a wider screen to browse cards, toasts,
             and copy side by side. Come back on a laptop to explore the
-            iterations.
+            iterations. Full text inventory for this board is also at{" "}
+            <a href="/case.md">/case.md</a>.
           </p>
+        </div>
+        <div className="sr-only">
+          Design iterations text inventory for AI and accessibility: Card (7
+          frames), Card variants (4), Tile (3), CTA (5), Toast (4), Buttons (6).
+          Locked copy variants include Pass the Thrill Earn Together, Your Brain
+          Just Leveled Up, 50 Days Strong, and Pass It On Champ. See /case.md for
+          the full titles and body copy.
         </div>
 
         <div className="iter-board__desktop">
