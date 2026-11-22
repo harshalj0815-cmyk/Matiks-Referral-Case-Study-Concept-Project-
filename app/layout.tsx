@@ -2,6 +2,7 @@ import "./globals.css";
 import { Figtree } from "next/font/google";
 import type { Metadata } from "next";
 import ScrollSync from "@/components/ScrollSync";
+import CustomCursor from "@/components/CustomCursor";
 
 const figtree = Figtree({
   subsets: ["latin"],
@@ -125,6 +126,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <ScrollSync />
+        <CustomCursor />
         {children}
       </body>
     </html>
