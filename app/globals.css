@@ -23,8 +23,7 @@ html.has-custom-cursor * {
   user-select: none;
   will-change: transform;
   transition: opacity 0.12s ease;
-  filter: drop-shadow(0 4px 8px rgba(33, 17, 114, 0.45))
-    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)) blur(0.35px);
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.35));
 }
 
 html {
