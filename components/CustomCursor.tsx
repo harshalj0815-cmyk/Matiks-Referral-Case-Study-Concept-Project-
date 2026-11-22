@@ -56,8 +56,8 @@ export default function CustomCursor() {
     <img
       src={
         pressed
-          ? "/cursors/on-click.svg?v=20261122b"
-          : "/cursors/default.svg?v=20261122b"
+          ? "/cursors/on-click.svg?v=20261122c"
+          : "/cursors/default.svg?v=20261122c"
       }
       alt=""
       aria-hidden
