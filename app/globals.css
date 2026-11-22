@@ -22,11 +22,16 @@ html.has-custom-cursor * {
   z-index: 99999;
   user-select: none;
   will-change: transform;
-  transition: opacity 0.12s ease;
+  transition: opacity 0.12s ease, filter 0.1s ease;
   /* Soft glow-like grey shadow, down-left (light from top-right) */
   filter:
     drop-shadow(-6px 8px 5px rgba(0, 0, 0, 0.22))
     drop-shadow(-12px 14px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Pressed: shadow pulls under the tip so it feels like it touches the surface */
+.custom-cursor.is-pressed {
+  filter: drop-shadow(-2px 3px 2.5px rgba(0, 0, 0, 0.3));
 }
 
 html {

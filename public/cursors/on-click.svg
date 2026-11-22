@@ -1,15 +1,15 @@
-﻿<svg width="116" height="134" viewBox="0 0 116 134" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-<path d="M32.3073 33.0359C44.4299 23.8864 61.6743 26.2966 70.8238 38.4192C77.0001 46.6026 77.9074 57.1188 74.1164 65.9042C73.4129 67.5345 73.63 69.4612 74.8647 70.7373L88.7797 85.1203C95.0877 91.6413 94.2852 102.208 87.0648 107.702C79.7005 113.305 69.0767 111.052 64.6213 102.941L54.5518 84.6114C53.7395 83.1328 52.0873 82.3515 50.4027 82.4438C41.5659 82.928 32.6563 79.1473 26.924 71.5524C17.7746 59.4299 20.185 42.1855 32.3073 33.0359Z" fill="url(#paint0_radial_click)"/>
+﻿<svg width="113" height="135" viewBox="0 0 113 135" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+<path d="M25.3447 31.439C22.3381 25.8897 28.2071 19.744 33.8891 22.4917L52.7428 31.6093C52.9488 31.709 53.1631 31.79 53.3823 31.8558C59.0154 33.5461 64.3358 37.1285 68.318 42.4046C74.8317 51.0349 76.009 61.8649 72.2332 70.343C71.4885 72.0151 71.6721 74.0142 72.9448 75.3297L86.2725 89.1055C92.5807 95.6266 91.7781 106.194 84.5576 111.687C77.1932 117.291 66.5694 115.037 62.1141 106.927L50.3464 85.5047C49.7018 84.3313 48.509 83.5796 47.1891 83.3561C40.3946 82.2057 33.7694 78.3261 29.035 72.0533C21.5129 62.0867 21.1061 49.186 27.2276 40.3625C28.1927 38.9713 28.4412 37.1544 27.6346 35.6656L25.3447 31.439Z" fill="url(#paint0_radial_click)"/>
 <g filter="url(#filter0_f_click)">
-<ellipse cx="80.4988" cy="99.067" rx="11" ry="9" transform="rotate(-31.3643 80.4988 99.067)" fill="#211172"/>
+<ellipse cx="77.9929" cy="103.052" rx="11" ry="9" transform="rotate(-31.3643 77.9929 103.052)" fill="#211172"/>
 </g>
 <defs>
-<filter id="filter0_f_click" x="66" y="85.4834" width="28.9961" height="27.167" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_f_click" x="63.4941" y="89.4688" width="28.9961" height="27.167" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
 <feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_click"/>
 </filter>
-<radialGradient id="paint0_radial_click" cx="0" cy="0" r="1" gradientTransform="matrix(-12.0204 103.173 -81.5103 -36.6028 44.6384 29.4034)" gradientUnits="userSpaceOnUse">
+<radialGradient id="paint0_radial_click" cx="0" cy="0" r="1" gradientTransform="matrix(-8 108.5 -85.7025 -42.1572 37.418 27.1435)" gradientUnits="userSpaceOnUse">
 <stop stop-color="#8E7EE0"/>
 <stop offset="1" stop-color="#342680"/>
 </radialGradient>

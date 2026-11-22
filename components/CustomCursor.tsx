@@ -56,12 +56,12 @@ export default function CustomCursor() {
     <img
       src={
         pressed
-          ? "/cursors/on-click.svg?v=20261122c"
-          : "/cursors/default.svg?v=20261122c"
+          ? "/cursors/on-click.svg?v=20261122d"
+          : "/cursors/default.svg?v=20261122d"
       }
       alt=""
       aria-hidden
-      className="custom-cursor"
+      className={`custom-cursor${pressed ? " is-pressed" : ""}`}
       style={{
         transform: `translate3d(${pos.x - hotspotX}px, ${pos.y - hotspotY}px, 0)`,
         opacity: visible ? 1 : 0,
