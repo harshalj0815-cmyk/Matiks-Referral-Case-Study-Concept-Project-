@@ -23,8 +23,8 @@ html.has-custom-cursor * {
   user-select: none;
   will-change: transform;
   transition: opacity 0.12s ease;
-  /* Soft grey shadow offset down-left (light from top-right), like the design ref */
-  filter: drop-shadow(-6px 8px 5px rgba(0, 0, 0, 0.32));
+  /* Soft grey shadow: down-left, clear gap, silhouette still readable (matches ref) */
+  filter: drop-shadow(-10px 12px 3.5px rgba(0, 0, 0, 0.36));
 }
 
 html {
