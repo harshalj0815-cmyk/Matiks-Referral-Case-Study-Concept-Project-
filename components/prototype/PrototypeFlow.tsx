@@ -1,6 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Motion01Icon,
+  ReloadIcon,
+  VolumeHighIcon,
+  VolumeMute01Icon,
+} from "@hugeicons/core-free-icons";
 import IPhoneFrame from "@/components/prototype/IPhoneFrame";
 import CaseSegmentedControl from "@/components/prototype/CaseSegmentedControl";
 import DuelVictoryScreen from "@/components/prototype/screens/DuelVictoryScreen";
@@ -43,102 +50,6 @@ const TRACK_OPTIONS: { value: TrackState; label: string }[] = [
   { value: "full", label: "Full" },
   { value: "empty", label: "Empty" },
 ];
-
-function ReloadIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M19.5 12a7.5 7.5 0 1 1-2.15-5.25"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-      />
-      <path
-        d="M19.5 4.5v5h-5"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function SoundIcon({ on }: { on: boolean }) {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M4.5 9.5v5h3.2L12 18.2V5.8L7.7 9.5H4.5Z"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
-      />
-      {on ? (
-        <>
-          <path
-            d="M15.2 9.2a3.4 3.4 0 0 1 0 5.6"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-          <path
-            d="M17.8 6.8a6.2 6.2 0 0 1 0 10.4"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-        </>
-      ) : (
-        <path
-          d="M15.5 9.5l5 5M20.5 9.5l-5 5"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-        />
-      )}
-    </svg>
-  );
-}
-
-function MotionIcon({ on }: { on: boolean }) {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
-      {on ? (
-        <>
-          {/* Easing curve — motion as design language, not ECG */}
-          <path
-            d="M4 16c3.2 0 4.2-8 8-8s4.8 8 8 8"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-          <path
-            d="M17.5 6.5l2.5 1.5-1.5 2.5"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </>
-      ) : (
-        <>
-          <path
-            d="M4 12h16"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-          <path
-            d="M15.5 8.5l5 5M20.5 8.5l-5 5"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-        </>
-      )}
-    </svg>
-  );
-}
 
 export default function PrototypeFlow() {
   const [flow, setFlow] = useState<FlowId>("slideup1");
@@ -316,7 +227,12 @@ export default function PrototypeFlow() {
                   setReloadKey((n) => n + 1);
                 }}
               >
-                <ReloadIcon />
+                <HugeiconsIcon
+                  icon={ReloadIcon}
+                  size={15}
+                  color="currentColor"
+                  strokeWidth={1.75}
+                />
               </button>
               <div className="prototype-flow__toggles" role="group" aria-label="Tools">
                 <button
@@ -326,7 +242,14 @@ export default function PrototypeFlow() {
                   onClick={() => setSoundOn(!soundOn)}
                 >
                   <span className="prototype-flow__toggle-copy">
-                    <SoundIcon on={soundOn} />
+                    <HugeiconsIcon
+                      icon={VolumeHighIcon}
+                      altIcon={VolumeMute01Icon}
+                      showAlt={!soundOn}
+                      size={15}
+                      color="currentColor"
+                      strokeWidth={1.75}
+                    />
                     Sound
                   </span>
                   <span className="prototype-flow__switch" aria-hidden>
@@ -343,7 +266,13 @@ export default function PrototypeFlow() {
                   }}
                 >
                   <span className="prototype-flow__toggle-copy">
-                    <MotionIcon on={animationsOn} />
+                    <HugeiconsIcon
+                      icon={Motion01Icon}
+                      size={15}
+                      color="currentColor"
+                      strokeWidth={1.75}
+                      style={{ opacity: animationsOn ? 1 : 0.55 }}
+                    />
                     Motion
                   </span>
                   <span className="prototype-flow__switch" aria-hidden>

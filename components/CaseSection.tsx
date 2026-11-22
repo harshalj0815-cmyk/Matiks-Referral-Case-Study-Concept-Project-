@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
+import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import type { StackPart, StackSection, TextPart } from "@/content/case";
 import {
   hero,
@@ -409,10 +409,10 @@ function LinkRow({
             >
               Open
               <HugeiconsIcon
-                icon={ArrowUpRight01Icon}
-                size={12}
+                icon={LinkSquare02Icon}
+                size={13}
                 color="currentColor"
-                strokeWidth={2}
+                strokeWidth={1.75}
               />
             </span>
           </a>

@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { RotateCwIcon } from "@hugeicons/core-free-icons";
+import { RotateClockwiseIcon } from "@hugeicons/core-free-icons";
 import { CopyIterations } from "@/components/CopyIterations";
 import { IterationCarousel } from "@/components/IterationCarousel";
 import { copyVariants, iterationGroups } from "@/content/iterations";
@@ -88,7 +88,7 @@ export function IterationsBoard({
             >
               <span className="iter-board__toggle-copy">
                 <HugeiconsIcon
-                  icon={RotateCwIcon}
+                  icon={RotateClockwiseIcon}
                   size={14}
                   color="currentColor"
                   strokeWidth={1.75}
