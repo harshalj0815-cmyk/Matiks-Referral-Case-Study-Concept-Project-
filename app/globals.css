@@ -23,8 +23,8 @@ html.has-custom-cursor * {
   user-select: none;
   will-change: transform;
   transition: opacity 0.12s ease;
-  /* Hard short shadow — offset a bit farther from the cursor */
-  filter: drop-shadow(4px 6px 0 rgba(0, 0, 0, 0.28));
+  /* Soft grey shadow offset down-left (light from top-right), like the design ref */
+  filter: drop-shadow(-6px 8px 5px rgba(0, 0, 0, 0.32));
 }
 
 html {
