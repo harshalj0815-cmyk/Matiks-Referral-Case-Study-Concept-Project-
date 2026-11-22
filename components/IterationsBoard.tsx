@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { RotateCwIcon } from "@hugeicons/core-free-icons";
 import { CopyIterations } from "@/components/CopyIterations";
 import { IterationCarousel } from "@/components/IterationCarousel";
 import { copyVariants, iterationGroups } from "@/content/iterations";
@@ -38,33 +40,6 @@ function Slot({
       <GroupLabel>{title}</GroupLabel>
       {children}
     </div>
-  );
-}
-
-function RotateIcon({ on }: { on: boolean }) {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden
-      style={{ opacity: on ? 1 : 0.55 }}
-    >
-      <path
-        d="M11.5 4.2A5.2 5.2 0 0 0 3.4 3.6M2.5 9.8a5.2 5.2 0 0 0 8.1.6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M11.5 1.8v2.6H8.9M2.5 12.2V9.6h2.6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -112,7 +87,13 @@ export function IterationsBoard({
               onClick={() => setRotateOn((v) => !v)}
             >
               <span className="iter-board__toggle-copy">
-                <RotateIcon on={rotateOn} />
+                <HugeiconsIcon
+                  icon={RotateCwIcon}
+                  size={14}
+                  color="currentColor"
+                  strokeWidth={1.75}
+                  style={{ opacity: rotateOn ? 1 : 0.55 }}
+                />
                 Rotate
               </span>
               <span className="iter-board__switch" aria-hidden>

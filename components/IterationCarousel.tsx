@@ -7,6 +7,11 @@ import {
   type CSSProperties,
   type TransitionEvent,
 } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowLeft01Icon,
+  ArrowRight01Icon,
+} from "@hugeicons/core-free-icons";
 
 const ink = "#282828";
 const mute = "#555555";
@@ -21,26 +26,6 @@ export type CarouselSlide = {
   /** Overrides frameWidth for this slide (e.g. icon vs text button). */
   width?: number;
 };
-
-function Chevron({ dir }: { dir: "left" | "right" }) {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d={dir === "left" ? "M9 2.5L4.5 7L9 11.5" : "M5 2.5L9.5 7L5 11.5"}
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export function IterationCarousel({
   slides,
@@ -284,7 +269,12 @@ export function IterationCarousel({
               className="iter-carousel__arrow"
               style={arrowStyle("left", showArrows, gutter)}
             >
-              <Chevron dir="left" />
+              <HugeiconsIcon
+                icon={ArrowLeft01Icon}
+                size={12}
+                color="currentColor"
+                strokeWidth={2}
+              />
             </button>
             <button
               type="button"
@@ -294,7 +284,12 @@ export function IterationCarousel({
               className="iter-carousel__arrow"
               style={arrowStyle("right", showArrows, gutter)}
             >
-              <Chevron dir="right" />
+              <HugeiconsIcon
+                icon={ArrowRight01Icon}
+                size={12}
+                color="currentColor"
+                strokeWidth={2}
+              />
             </button>
           </>
         ) : null}

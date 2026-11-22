@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import type { StackPart, StackSection, TextPart } from "@/content/case";
 import {
   hero,
@@ -396,13 +398,22 @@ function LinkRow({
             </span>
             <span
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
                 fontSize: 12,
                 fontWeight: 500,
                 color: mute,
                 letterSpacing: "-0.01em",
               }}
             >
-              Open ↗
+              Open
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                size={12}
+                color="currentColor"
+                strokeWidth={2}
+              />
             </span>
           </a>
         );
