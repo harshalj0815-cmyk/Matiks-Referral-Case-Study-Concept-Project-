@@ -23,7 +23,8 @@ html.has-custom-cursor * {
   user-select: none;
   will-change: transform;
   transition: opacity 0.12s ease;
-  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.35));
+  /* Hard short shadow — no soft glow (SVG blur removed from assets) */
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.28));
 }
 
 html {
