@@ -23,8 +23,10 @@ html.has-custom-cursor * {
   user-select: none;
   will-change: transform;
   transition: opacity 0.12s ease;
-  /* Soft diffused grey shadow, down-left — matches default cursor ref */
-  filter: drop-shadow(-8px 10px 6px rgba(0, 0, 0, 0.28));
+  /* Soft glow-like grey shadow, down-left (light from top-right) */
+  filter:
+    drop-shadow(-6px 8px 5px rgba(0, 0, 0, 0.22))
+    drop-shadow(-12px 14px 12px rgba(0, 0, 0, 0.2));
 }
 
 html {
