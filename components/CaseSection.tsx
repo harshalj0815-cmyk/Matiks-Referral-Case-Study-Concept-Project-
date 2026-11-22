@@ -319,6 +319,7 @@ function VisualSlot({
           key={resolvedSrc}
           src={resolvedSrc}
           alt={alt || caption}
+          draggable={false}
           onError={() => setFailed(true)}
           style={{
             display: "block",
@@ -441,6 +442,7 @@ export function ProjectThumbnailSection() {
       <img
         src={hero.visualSrc}
         alt={hero.visualAlt}
+        draggable={false}
         style={{
           display: "block",
           width: "100%",
