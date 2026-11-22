@@ -9,12 +9,17 @@ body {
 /* Case study assets — no drag ghost, no select highlight */
 img,
 picture,
-svg {
-  -webkit-user-drag: none;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -webkit-touch-callout: none;
+svg,
+canvas,
+video {
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  pointer-events: auto;
 }
 
 /* Custom Matiks cursor — fine pointers only (class set by CustomCursor) */

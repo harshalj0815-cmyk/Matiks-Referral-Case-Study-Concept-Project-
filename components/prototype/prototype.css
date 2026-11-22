@@ -1,3 +1,13 @@
+.prototype-canvas img,
+.prototype-canvas svg,
+.prototype-canvas picture,
+.prototype-canvas canvas {
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
 .prototype-canvas {
   --proto-lime: #b0f862;
   --proto-lime-deep: #61b309;
