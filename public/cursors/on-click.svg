@@ -1,15 +1,8 @@
-<svg width="113" height="135" viewBox="0 0 113 135" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M25.3447 31.439C22.3381 25.8897 28.2071 19.744 33.8891 22.4917L52.7428 31.6093C52.9488 31.709 53.1631 31.79 53.3823 31.8558C59.0154 33.5461 64.3358 37.1285 68.318 42.4046C74.8317 51.0349 76.009 61.8649 72.2332 70.343C71.4885 72.0151 71.6721 74.0142 72.9448 75.3297L86.2725 89.1055C92.5807 95.6266 91.7781 106.194 84.5576 111.687C77.1932 117.291 66.5694 115.037 62.1141 106.927L50.3464 85.5047C49.7018 84.3313 48.509 83.5796 47.1891 83.3561C40.3946 82.2057 33.7694 78.3261 29.035 72.0533C21.5129 62.0867 21.1061 49.186 27.2276 40.3625C28.1927 38.9713 28.4412 37.1544 27.6346 35.6656L25.3447 31.439Z" fill="url(#paint0_radial_1059_1655)"/>
-<g filter="url(#filter0_f_1059_1655)">
+﻿<svg width="113" height="135" viewBox="0 0 113 135" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25.3447 31.439C22.3381 25.8897 28.2071 19.744 33.8891 22.4917L52.7428 31.6093C52.9488 31.709 53.1631 31.79 53.3823 31.8558C59.0154 33.5461 64.3358 37.1285 68.318 42.4046C74.8317 51.0349 76.009 61.8649 72.2332 70.343C71.4885 72.0151 71.6721 74.0142 72.9448 75.3297L86.2725 89.1055C92.5807 95.6266 91.7781 106.194 84.5576 111.687C77.1932 117.291 66.5694 115.037 62.1141 106.927L50.3464 85.5047C49.7018 84.3313 48.509 83.5796 47.1891 83.3561C40.3946 82.2057 33.7694 78.3261 29.035 72.0533C21.5129 62.0867 21.1061 49.186 27.2276 40.3625C28.1927 38.9713 28.4412 37.1544 27.6346 35.6656L25.3447 31.439Z" fill="url(#paint0_radial_click)"/>
 <ellipse cx="77.9929" cy="103.052" rx="11" ry="9" transform="rotate(-31.3643 77.9929 103.052)" fill="#211172"/>
-</g>
 <defs>
-<filter id="filter0_f_1059_1655" x="63.4941" y="89.4688" width="28.9961" height="27.167" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_1059_1655"/>
-</filter>
-<radialGradient id="paint0_radial_1059_1655" cx="0" cy="0" r="1" gradientTransform="matrix(-8 108.5 -85.7025 -42.1572 37.418 27.1435)" gradientUnits="userSpaceOnUse">
+<radialGradient id="paint0_radial_click" cx="0" cy="0" r="1" gradientTransform="matrix(-8 108.5 -85.7025 -42.1572 37.418 27.1435)" gradientUnits="userSpaceOnUse">
 <stop stop-color="#8E7EE0"/>
 <stop offset="1" stop-color="#342680"/>
 </radialGradient>
