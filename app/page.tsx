@@ -5,6 +5,7 @@ import {
   ProjectThumbnailSection,
 } from "@/components/CaseSection";
 import { ScrollSpyNav } from "@/components/ScrollSpyNav";
+import SiteFooter from "@/components/SiteFooter";
 
 const ink = "#282828";
 const mute = "#555555";
@@ -119,6 +120,7 @@ export default function Page() {
       >
         <CaseStudyBody />
       </div>
+      <SiteFooter />
     </div>
   );
 }
