@@ -45,6 +45,18 @@ export default function SiteFooter() {
               Contact me
             </a>
           </li>
+          <li>
+            {/* No live portfolio link yet — kept as a static button. */}
+            <button
+              type="button"
+              className="sf-cta sf-cta--static"
+              disabled
+              aria-disabled="true"
+              title="Portfolio coming soon"
+            >
+              Portfolio
+            </button>
+          </li>
         </ul>
       </div>
     </footer>

@@ -74,20 +74,7 @@ export default function Page() {
           >
             Concept case study
           </span>
-          <a
-            href="#ai-prototype"
-            className="nav-cta"
-            style={{
-              fontSize: 13,
-              fontWeight: 600,
-              background: ink,
-              borderRadius: 999,
-              padding: "10px 16px",
-              lineHeight: 1,
-              textDecoration: "none",
-              transition: "color 0.2s ease",
-            }}
-          >
+          <a href="#ai-prototype" className="nav-cta">
             AI-Prototype
           </a>
           <span

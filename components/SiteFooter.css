@@ -105,17 +105,24 @@
     color 0.15s ease, transform 0.1s ease;
 }
 
-.sf-cta:hover,
-.sf-cta:focus-visible {
+.sf-cta:not(.sf-cta--static):hover,
+.sf-cta:not(.sf-cta--static):focus-visible {
   background: #b0f862;
   border-color: #61b309;
   color: #000;
 }
 
-.sf-cta:active {
+.sf-cta:not(.sf-cta--static):active {
   transform: translateY(3px);
   border-bottom-width: 3px;
   padding-bottom: 13px;
+}
+
+/* Portfolio: no live link yet — looks like the CTA but doesn't react */
+.sf-cta--static {
+  cursor: default;
+  font-family: inherit;
+  opacity: 0.6;
 }
 
 .sf-footer a:focus-visible {
